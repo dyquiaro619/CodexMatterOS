@@ -1,14 +1,11 @@
-import { CommandCenter } from "@/components/command-center";
 import { TopNav } from "@/components/top-nav";
-import { fetchCommandCenterData } from "@/lib/api";
+import { ValueToFirmView } from "@/components/value-to-firm-view";
 
-export default async function Home() {
-  const data = await fetchCommandCenterData();
-
+export default function Home() {
   return (
     <>
       <TopNav />
-      <CommandCenter data={data} />
+      <ValueToFirmView />
     </>
   );
 }

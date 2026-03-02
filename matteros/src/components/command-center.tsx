@@ -248,7 +248,7 @@ export function CommandCenter({ data }: { data: CommandCenterData }) {
           <p className="bridge-note">Layer 1 · Firm Pulse: {formatLastEvaluated(data.dashboard.lastEvaluatedAt)}</p>
         </div>
         <div className="hero-actions">
-          <Link className="hero-link" href="/value-to-firm">
+          <Link className="hero-link" href="/">
             Value to Firm
           </Link>
           <div className={`posture-chip posture-${postureTone(posture)}`}>

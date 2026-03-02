@@ -5,10 +5,10 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 const PRIMARY_ITEMS = [
-  { href: "/", label: "Command Bridge" },
+  { href: "/command-center", label: "Command Bridge" },
   { href: "/matters", label: "Matters" },
   { href: "/policy-snapshots", label: "Policy Snapshots" },
-  { href: "/value-to-firm", label: "Value to Firm" }
+  { href: "/", label: "Value to Firm" }
 ] as const;
 
 const LEARN_ITEMS = [

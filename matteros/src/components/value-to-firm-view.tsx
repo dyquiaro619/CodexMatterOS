@@ -4,9 +4,8 @@ import { useMemo, useState } from "react";
 
 type Tier = {
   name: string;
-  min: number;
-  max: number;
   fit: string;
+  scope: string;
 };
 
 type RoleTrack = {
@@ -17,29 +16,29 @@ type RoleTrack = {
 };
 
 const tiers: Tier[] = [
-  { name: "Essential", min: 25000, max: 50000, fit: "Solo and small teams" },
-  { name: "Professional", min: 75000, max: 130000, fit: "Growing partner groups" },
-  { name: "Enterprise", min: 150000, max: 260000, fit: "Multi-office operations" },
-  { name: "Mission-Critical", min: 300000, max: 500000, fit: "High-exposure firms" }
+  { name: "Essential", fit: "Solo and small teams", scope: "Pilot Scope" },
+  { name: "Professional", fit: "Growing partner groups", scope: "Core Adoption" },
+  { name: "Enterprise", fit: "Multi-office operations", scope: "Firmwide Control" },
+  { name: "Mission-Critical", fit: "High-exposure firms", scope: "Advanced Coverage" }
 ];
 
 const roleTracks: RoleTrack[] = [
   {
     id: "managing-partner",
     label: "Managing Partner",
-    title: "What this means for your firm",
+    title: "What This Means For Your Firm",
     text: "Your firm already has systems to organize matters. What you are buying here is decision integrity under policy volatility: earlier risk detection, less emergency intervention, and faster evidence when a decision must be defended."
   },
   {
     id: "practice-lead",
     label: "Practice Lead",
-    title: "What this means for your team",
+    title: "What This Means For Your Team",
     text: "Your team gets one clear operational model for how policy changes affect active matters. That reduces interpretation drift across attorneys, lowers avoidable rework, and gives you consistent quality at scale."
   },
   {
     id: "operations",
     label: "Operations",
-    title: "What this means for day-to-day control",
+    title: "What This Means For Day-to-Day Control",
     text: "You get a live command surface where matter risk states, policy snapshots, and escalation signals are connected. This turns late surprises into trackable interventions while there is still time to act."
   }
 ];
@@ -84,8 +83,8 @@ export function ValueToFirmView() {
   const [policySensitiveShare, setPolicySensitiveShare] = useState(62);
   const [incidentRate, setIncidentRate] = useState(5);
   const [incidentCost, setIncidentCost] = useState(90000);
-  const [captureRate, setCaptureRate] = useState(24);
-  const [confidence, setConfidence] = useState(84);
+  const [captureRate, setCaptureRate] = useState(12);
+  const [confidence, setConfidence] = useState(75);
   const [activeRole, setActiveRole] = useState<RoleTrack["id"]>(roleTracks[0].id);
 
   const model = useMemo(() => {
@@ -115,23 +114,15 @@ export function ValueToFirmView() {
   }, [matters, policySensitiveShare, incidentRate, incidentCost, avgFee, captureRate, confidence]);
 
   const activeTrack = roleTracks.find((track) => track.id === activeRole) ?? roleTracks[0];
-  const foundingPrice = 12500;
-  const futureAnchor = Math.max(model.protectedValue, 75000);
-  const foundingDiscount = Math.round(((futureAnchor - foundingPrice) / futureAnchor) * 100);
-
   return (
     <main className="value-shell">
       <section className="value-hero">
         <p className="value-eyebrow">Value To Firm</p>
-        <h1>
-          MatterOS is not a practice management app. It is the operational risk control layer that
-          helps immigration firms make explainable decisions faster, with less malpractice exposure and
-          less partner firefighting.
-        </h1>
+        <h1>Operational Risk Control For Immigration Firms</h1>
       </section>
 
       <section className="value-section">
-        <h2>What policy volatility is likely costing your firm each year</h2>
+        <h2>What Policy Volatility Is Likely Costing Your Firm Each Year</h2>
         <p>
           Set your firm profile. The model estimates the financial impact of late risk discovery,
           avoidable rework, and partner escalation time.
@@ -247,7 +238,7 @@ export function ValueToFirmView() {
       </section>
 
       <section className="value-section">
-        <h2>How MatterOS protects decisions your firm must defend</h2>
+        <h2>How MatterOS Protects Decisions Your Firm Must Defend</h2>
 
         <div className="value-grid value-grid-3">
           <article className="value-panel">
@@ -277,16 +268,16 @@ export function ValueToFirmView() {
       </section>
 
       <section className="value-section">
-        <h2>What a value-based investment can look like for your firm</h2>
+        <h2>What Value Realization Can Look Like For Your Firm</h2>
         <p>
-          This pricing anchor uses your exposure estimate, then applies a value-capture rate and
-          execution confidence factor.
+          This estimate focuses on risk-value protected for your firm. Commercial terms are scoped
+          separately after workflow and risk-baseline review.
         </p>
 
         <div className="value-grid value-grid-main">
           <article className="value-panel">
             <label className="value-field" htmlFor="capture-range">
-              <span>Value capture rate</span>
+              <span>Value Capture Rate</span>
               <strong>{captureRate}%</strong>
               <input
                 id="capture-range"
@@ -300,7 +291,7 @@ export function ValueToFirmView() {
             </label>
 
             <label className="value-field" htmlFor="confidence-range">
-              <span>Execution confidence</span>
+              <span>Execution Confidence</span>
               <strong>{confidence}%</strong>
               <input
                 id="confidence-range"
@@ -314,7 +305,7 @@ export function ValueToFirmView() {
             </label>
 
             <div className="value-anchor">
-              <span>Estimated annual value protected</span>
+              <span>Estimated Annual Value Protected</span>
               <strong>{formatMoney(model.protectedValue)}</strong>
               <p>
                 Based on {captureRate}% capture of estimated preventable exposure with {confidence}%
@@ -325,8 +316,8 @@ export function ValueToFirmView() {
 
           <article className="value-panel">
             <div className="value-tier-header">
-              <span>Recommended starting tier</span>
-              <strong>{model.selectedTier.name}</strong>
+              <span>Recommended Rollout Stage</span>
+              <strong>{model.selectedTier.scope}</strong>
             </div>
 
             <div className="value-tier-list">
@@ -339,22 +330,22 @@ export function ValueToFirmView() {
                       <strong>{tier.name}</strong>
                       <span>{tier.fit}</span>
                     </div>
-                    <strong>{`${formatMoney(tier.min)}-${formatMoney(tier.max)}`}</strong>
+                    <strong>{tier.scope}</strong>
                   </div>
                 );
               })}
             </div>
 
             <p className="value-founding-note">
-              If your firm enters at {formatMoney(foundingPrice)}, that is a {foundingDiscount}% early
-              partnership discount against a {formatMoney(futureAnchor)} value-based anchor.
+              Investment is finalized after firm-specific discovery. Early conversations stay focused on
+              operational outcomes and risk reduction priorities.
             </p>
           </article>
         </div>
       </section>
 
       <section className="value-section">
-        <h2>How this value appears across your leadership team</h2>
+        <h2>How This Value Appears Across Your Leadership Team</h2>
 
         <div className="value-role-tabs" role="tablist" aria-label="Role-based messaging">
           {roleTracks.map((track) => {

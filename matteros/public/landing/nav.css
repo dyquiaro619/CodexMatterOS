@@ -1,0 +1,103 @@
+/* ═══ SHARED NAV — MatterOS Explainer Site ═══ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+
+.mtr-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(15, 23, 42, 0.97);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  font-family: 'Inter', -apple-system, sans-serif;
+}
+
+.mtr-nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.mtr-nav-logo {
+  font-size: 20px;
+  font-weight: 900;
+  color: #fff;
+  text-decoration: none;
+  letter-spacing: -0.5px;
+  margin-right: 48px;
+  flex-shrink: 0;
+}
+.mtr-nav-logo span { color: #818cf8; }
+
+.mtr-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.mtr-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #94a3b8;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+.mtr-nav-link:hover {
+  background: rgba(255,255,255,0.06);
+  color: #e2e8f0;
+}
+.mtr-nav-link.active {
+  background: rgba(99,102,241,0.12);
+  color: #818cf8;
+}
+.mtr-nav-link .nav-icon { font-size: 16px; }
+
+.mtr-nav-divider {
+  width: 1px;
+  height: 20px;
+  background: rgba(255,255,255,0.08);
+  margin: 0 8px;
+}
+
+.mtr-nav-cta {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.mtr-nav-cta a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.mtr-nav-cta a:hover { transform: translateY(-1px); }
+.mtr-nav-cta .btn-demo {
+  background: #6366f1;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.3);
+}
+
+@media (max-width: 768px) {
+  .mtr-nav-inner { padding: 0 20px; height: 56px; }
+  .mtr-nav-logo { margin-right: 24px; font-size: 18px; }
+  .mtr-nav-link { padding: 6px 10px; font-size: 13px; }
+  .mtr-nav-link .nav-icon { display: none; }
+  .mtr-nav-cta { display: none; }
+}

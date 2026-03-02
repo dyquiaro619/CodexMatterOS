@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MatterOS — The Firm Stability Platform</title>
+<link rel="stylesheet" href="nav.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    min-height: 100vh;
+  }
+
+  /* ═══ HERO ═══ */
+  .hero {
+    padding: 100px 48px 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -100px; left: 50%; transform: translateX(-50%);
+    width: 900px; height: 900px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    display: inline-block;
+    background: rgba(99,102,241,0.12);
+    border: 1px solid rgba(99,102,241,0.25);
+    color: #818cf8;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    padding: 7px 22px; border-radius: 24px;
+    margin-bottom: 28px;
+  }
+  .hero h1 {
+    font-size: 62px; font-weight: 900;
+    letter-spacing: -3px; line-height: 1.05;
+    color: #fff;
+    max-width: 860px; margin: 0 auto 10px;
+  }
+  .hero h1 span { color: #818cf8; }
+  .hero-sub {
+    font-size: 20px; color: #64748b;
+    max-width: 640px; margin: 20px auto 0;
+    line-height: 1.7;
+  }
+  .hero-sub strong { color: #94a3b8; }
+
+  /* ═══ EXPLAINER CARDS ═══ */
+  .cards-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 64px 48px 80px;
+  }
+  .cards-label {
+    font-size: 12px; font-weight: 800;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    color: #475569; text-align: center;
+    margin-bottom: 36px;
+  }
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .explainer-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 20px;
+    padding: 36px 30px;
+    text-decoration: none;
+    display: block;
+    transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s, background 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .explainer-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 20px 20px 0 0;
+  }
+  .explainer-card:nth-child(1)::before { background: linear-gradient(90deg, #f87171, #fbbf24); }
+  .explainer-card:nth-child(2)::before { background: linear-gradient(90deg, #818cf8, #6366f1); }
+  .explainer-card:nth-child(3)::before { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+
+  .explainer-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 48px rgba(0,0,0,0.3);
+    border-color: rgba(255,255,255,0.14);
+    background: rgba(255,255,255,0.05);
+  }
+  .card-badge {
+    font-size: 11px; font-weight: 800;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 4px 12px; border-radius: 10px;
+    display: inline-block; margin-bottom: 20px;
+  }
+  .explainer-card:nth-child(1) .card-badge { background: rgba(248,113,113,0.1); color: #f87171; }
+  .explainer-card:nth-child(2) .card-badge { background: rgba(129,140,248,0.1); color: #818cf8; }
+  .explainer-card:nth-child(3) .card-badge { background: rgba(251,191,36,0.1); color: #fbbf24; }
+
+  .card-icon { font-size: 48px; margin-bottom: 20px; display: block; }
+  .explainer-card h2 {
+    font-size: 26px; font-weight: 800;
+    color: #fff; letter-spacing: -0.5px;
+    margin-bottom: 10px; line-height: 1.2;
+  }
+  .explainer-card p {
+    font-size: 15px; color: #64748b;
+    line-height: 1.7; margin-bottom: 28px;
+  }
+  .card-arrow {
+    font-size: 14px; font-weight: 700;
+    display: flex; align-items: center; gap: 6px;
+    transition: gap 0.2s;
+  }
+  .explainer-card:nth-child(1) .card-arrow { color: #f87171; }
+  .explainer-card:nth-child(2) .card-arrow { color: #818cf8; }
+  .explainer-card:nth-child(3) .card-arrow { color: #fbbf24; }
+  .explainer-card:hover .card-arrow { gap: 10px; }
+
+  /* ═══ POSITIONING STRIP ═══ */
+  .positioning {
+    background: rgba(255,255,255,0.02);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 48px;
+    text-align: center;
+  }
+  .positioning p {
+    font-size: 22px; font-weight: 600;
+    color: rgba(255,255,255,0.65);
+    max-width: 780px; margin: 0 auto;
+    line-height: 1.6; font-style: italic;
+  }
+  .positioning p strong { color: #fff; font-style: normal; }
+
+  /* ═══ PILLAR STRIP ═══ */
+  .pillars {
+    max-width: 1100px; margin: 0 auto;
+    padding: 64px 48px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .pillar {
+    text-align: center; padding: 28px 20px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+  }
+  .pillar-icon { font-size: 36px; margin-bottom: 14px; }
+  .pillar h3 { font-size: 18px; font-weight: 800; color: #e2e8f0; margin-bottom: 6px; }
+  .pillar p { font-size: 14px; color: #64748b; line-height: 1.6; }
+
+  /* ═══ FOOTER ═══ */
+  .footer {
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 28px 48px;
+    text-align: center;
+    font-size: 14px; color: #475569;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav class="mtr-nav">
+  <div class="mtr-nav-inner">
+    <a href="index.html" class="mtr-nav-logo">Matter<span>OS</span></a>
+    <div class="mtr-nav-links">
+      <a href="index.html" class="mtr-nav-link active"><span class="nav-icon">&#127968;</span> Overview</a>
+      <div class="mtr-nav-divider"></div>
+      <a href="policy-whiplash.html" class="mtr-nav-link"><span class="nav-icon">&#127754;</span> Policy Whiplash</a>
+      <a href="command-bridge.html" class="mtr-nav-link"><span class="nav-icon">&#128207;</span> Command Bridge</a>
+      <a href="signal-authority.html" class="mtr-nav-link"><span class="nav-icon">&#127919;</span> Signal Authority</a>
+      <a href="how-it-works.html" class="mtr-nav-link"><span class="nav-icon">&#9881;&#65039;</span> How It Works</a>
+    </div>
+    <div class="mtr-nav-cta">
+      <a href="https://calendly.com/automationlegal/30min" class="btn-demo" target="_blank" rel="noopener">Request Demo &#8594;</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <div class="hero-eyebrow">Firm Stability Platform</div>
+  <h1>The operating system for <span>immigration law.</span></h1>
+  <p class="hero-sub">MatterOS doesn't manage cases. It <strong>stabilizes your firm's entire legal execution</strong> — converting external chaos into internal clarity before it reaches your team.</p>
+</div>
+
+<!-- ═══ POSITIONING ═══ -->
+<div class="positioning">
+  <p>"Stripe stabilizes payments. AWS stabilizes computing. <strong>MatterOS stabilizes your firm's legal execution.</strong>"</p>
+</div>
+
+<!-- ═══ EXPLAINER CARDS ═══ -->
+<div class="cards-section">
+  <div class="cards-label">Three Core Concepts — Explore Each One</div>
+  <div class="cards-grid">
+
+    <a href="policy-whiplash.html" class="explainer-card">
+      <div class="card-badge">Explainer 1</div>
+      <span class="card-icon">&#127754;</span>
+      <h2>Policy Whiplash</h2>
+      <p>Why immigration firms get blindsided by policy changes — and how MatterOS absorbs the volatility before it reaches your attorneys.</p>
+      <div class="card-arrow">Read Explainer &#8594;</div>
+    </a>
+
+    <a href="command-bridge.html" class="explainer-card">
+      <div class="card-badge">Explainer 2</div>
+      <span class="card-icon">&#128207;</span>
+      <h2>Partner Command Bridge</h2>
+      <p>Five intentional layers of information designed so a managing partner can understand firm health in 30 seconds — without asking anyone.</p>
+      <div class="card-arrow">Read Explainer &#8594;</div>
+    </a>
+
+    <a href="signal-authority.html" class="explainer-card">
+      <div class="card-badge">Explainer 3</div>
+      <span class="card-icon">&#127919;</span>
+      <h2>Signal Authority</h2>
+      <p>How MatterOS earns the right to interrupt you — by proving it knows when not to. Silence is a feature, not a gap.</p>
+      <div class="card-arrow">Read Explainer &#8594;</div>
+    </a>
+
+  </div>
+</div>
+
+<!-- ═══ PILLARS ═══ -->
+<div class="pillars">
+  <div class="pillar">
+    <div class="pillar-icon">&#128214;</div>
+    <h3>Event Ledger</h3>
+    <p>Every action permanently recorded. Append-only. Tamper-proof. Your complete audit trail — court-ready by design.</p>
+  </div>
+  <div class="pillar">
+    <div class="pillar-icon">&#128248;</div>
+    <h3>Policy Snapshot</h3>
+    <p>Every decision captured with its reasoning. Not just what you did — but why, under which policy, at what moment in time.</p>
+  </div>
+  <div class="pillar">
+    <div class="pillar-icon">&#128680;</div>
+    <h3>Risk Engine</h3>
+    <p>Deterministic IF/THEN rules that fire before problems become crises. No black-box AI — every alert is explainable.</p>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<div class="footer">
+  MatterOS &mdash; The Firm Stability Platform for Immigration Law
+</div>
+
+</body>
+</html>

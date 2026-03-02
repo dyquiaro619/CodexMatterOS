@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Policy Whiplash — MatterOS Firm Stability Platform</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  @page { size: A3 portrait; margin: 0; }
+
+  :root {
+    --slate-50: #f8fafc; --slate-100: #f1f5f9; --slate-200: #e2e8f0;
+    --slate-300: #cbd5e1; --slate-400: #94a3b8; --slate-500: #64748b;
+    --slate-600: #475569; --slate-700: #334155; --slate-800: #1e293b; --slate-900: #0f172a;
+    --red-50: #fef2f2; --red-100: #fee2e2; --red-200: #fecaca;
+    --red-400: #f87171; --red-500: #ef4444; --red-600: #dc2626; --red-700: #b91c1c; --red-800: #991b1b;
+    --green-50: #f0fdf4; --green-100: #dcfce7; --green-200: #bbf7d0;
+    --green-400: #4ade80; --green-500: #22c55e; --green-600: #16a34a; --green-700: #15803d; --green-800: #166534;
+    --indigo-50: #eef2ff; --indigo-100: #e0e7ff; --indigo-200: #c7d2fe;
+    --indigo-400: #818cf8; --indigo-500: #6366f1; --indigo-600: #4f46e5; --indigo-700: #4338ca; --indigo-800: #3730a3;
+    --amber-50: #fffbeb; --amber-100: #fef3c7; --amber-200: #fde68a;
+    --amber-400: #fbbf24; --amber-500: #f59e0b; --amber-600: #d97706; --amber-700: #b45309;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--slate-900);
+    color: var(--slate-800);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ═══ HERO ═══ */
+  .hero {
+    background: linear-gradient(135deg, var(--slate-900) 0%, #1a1a3e 50%, var(--slate-900) 100%);
+    padding: 72px 48px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -200px; left: 50%; transform: translateX(-50%);
+    width: 900px; height: 900px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(99,102,241,0.15);
+    border: 1px solid rgba(99,102,241,0.3);
+    color: var(--indigo-400);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    padding: 8px 24px;
+    border-radius: 24px;
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-size: 56px;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: -2.5px;
+    line-height: 1.08;
+    margin-bottom: 8px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero h1 .highlight {
+    background: linear-gradient(135deg, var(--red-400), var(--amber-400));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    font-size: 20px;
+    color: var(--slate-400);
+    max-width: 700px;
+    margin: 20px auto 0;
+    line-height: 1.65;
+  }
+  .hero-sub strong { color: var(--slate-200); }
+
+  /* ═══ WHAT IS IT ═══ */
+  .whiplash-intro { background: #fff; padding: 64px 48px; }
+  .container { max-width: 1140px; margin: 0 auto; }
+
+  .intro-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 44px;
+    align-items: center;
+  }
+  .intro-text h2 {
+    font-size: 38px;
+    font-weight: 800;
+    color: var(--slate-900);
+    letter-spacing: -1.5px;
+    margin-bottom: 20px;
+    line-height: 1.15;
+  }
+  .intro-text h2 span { color: var(--red-600); }
+  .intro-text p {
+    font-size: 17px;
+    color: var(--slate-600);
+    line-height: 1.8;
+    margin-bottom: 14px;
+  }
+
+  .whiplash-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  .stat-card {
+    background: var(--slate-50);
+    border: 1px solid var(--slate-200);
+    border-radius: 16px;
+    padding: 26px 22px;
+    text-align: center;
+  }
+  .stat-num {
+    font-size: 42px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .stat-card:nth-child(1) .stat-num { color: var(--red-600); }
+  .stat-card:nth-child(2) .stat-num { color: var(--amber-600); }
+  .stat-card:nth-child(3) .stat-num { color: var(--indigo-600); }
+  .stat-card:nth-child(4) .stat-num { color: var(--slate-800); }
+  .stat-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--slate-500);
+    line-height: 1.45;
+  }
+
+  /* ═══ VOLATILITY CALLOUT ═══ */
+  .volatility-bar {
+    background: linear-gradient(135deg, #1e1b4b, #312e81);
+    padding: 40px 48px;
+    text-align: center;
+  }
+  .volatility-bar blockquote {
+    font-size: 22px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+    max-width: 820px;
+    margin: 0 auto;
+    line-height: 1.6;
+    font-style: italic;
+  }
+  .volatility-bar .attribution {
+    font-size: 14px;
+    color: var(--indigo-400);
+    margin-top: 14px;
+    font-weight: 600;
+    font-style: normal;
+  }
+
+  /* ═══ TOGGLE ═══ */
+  .comparison-section { background: var(--slate-50); padding: 64px 48px; }
+  .comparison-header { text-align: center; margin-bottom: 40px; }
+  .comparison-header h2 {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--slate-900);
+    letter-spacing: -1px;
+    margin-bottom: 10px;
+  }
+  .comparison-header p { font-size: 17px; color: var(--slate-500); }
+
+  .toggle-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    margin-bottom: 36px;
+  }
+  .toggle-label { font-size: 16px; font-weight: 700; transition: color 0.3s; }
+  .toggle-label.active.label-without { color: var(--red-600); }
+  .toggle-label.active.label-with { color: var(--green-600); }
+  .toggle-label:not(.active) { color: var(--slate-400); }
+
+  .toggle-switch {
+    width: 60px; height: 30px;
+    background: var(--red-400);
+    border-radius: 15px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.4s;
+    flex-shrink: 0;
+  }
+  .toggle-switch.on { background: var(--green-500); }
+  .toggle-knob {
+    width: 24px; height: 24px;
+    background: #fff;
+    border-radius: 50%;
+    position: absolute;
+    top: 3px; left: 3px;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  }
+  .toggle-switch.on .toggle-knob { transform: translateX(30px); }
+
+  .scenario-container { position: relative; min-height: 480px; }
+  .scenario {
+    opacity: 0; transform: translateY(12px);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: absolute; top: 0; left: 0; right: 0;
+    pointer-events: none;
+  }
+  .scenario.active {
+    opacity: 1; transform: translateY(0);
+    pointer-events: auto; position: relative;
+  }
+
+  .timeline {
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    top: 36px; left: 48px; right: 48px;
+    height: 3px;
+    border-radius: 2px;
+  }
+  .scenario-without .timeline::before { background: linear-gradient(90deg, var(--slate-300), var(--red-300), var(--red-500)); }
+  .scenario-with .timeline::before { background: linear-gradient(90deg, var(--indigo-300), var(--green-300), var(--green-500)); }
+
+  .tl-step {
+    flex: 1;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    padding: 0 8px;
+  }
+  .tl-icon {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+  .scenario-without .tl-step:nth-child(1) .tl-icon { background: var(--slate-200); }
+  .scenario-without .tl-step:nth-child(2) .tl-icon { background: var(--amber-100); }
+  .scenario-without .tl-step:nth-child(3) .tl-icon { background: var(--red-100); }
+  .scenario-without .tl-step:nth-child(4) .tl-icon { background: var(--red-200); }
+  .scenario-without .tl-step:nth-child(5) .tl-icon { background: var(--red-100); border-color: var(--red-300); }
+  .scenario-with .tl-step:nth-child(1) .tl-icon { background: var(--indigo-100); }
+  .scenario-with .tl-step:nth-child(2) .tl-icon { background: var(--indigo-100); }
+  .scenario-with .tl-step:nth-child(3) .tl-icon { background: var(--green-100); }
+  .scenario-with .tl-step:nth-child(4) .tl-icon { background: var(--green-100); }
+  .scenario-with .tl-step:nth-child(5) .tl-icon { background: var(--green-200); border-color: var(--green-400); }
+
+  .tl-time {
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .scenario-without .tl-time { color: var(--slate-400); }
+  .scenario-with .tl-time { color: var(--indigo-500); }
+
+  .tl-title { font-size: 16px; font-weight: 700; margin-bottom: 5px; line-height: 1.2; }
+  .scenario-without .tl-title { color: var(--red-700); }
+  .scenario-with .tl-title { color: var(--green-700); }
+
+  .tl-desc { font-size: 14px; line-height: 1.55; max-width: 190px; margin: 0 auto; }
+  .scenario-without .tl-desc { color: var(--red-600); }
+  .scenario-with .tl-desc { color: var(--green-600); }
+
+  .outcome-banner {
+    margin-top: 32px;
+    border-radius: 16px;
+    padding: 28px 32px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .scenario-without .outcome-banner { background: linear-gradient(135deg, var(--red-50), var(--red-100)); border: 1px solid var(--red-200); }
+  .scenario-with .outcome-banner { background: linear-gradient(135deg, var(--green-50), var(--green-100)); border: 1px solid var(--green-200); }
+  .outcome-icon { font-size: 40px; flex-shrink: 0; }
+  .outcome-text h3 { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+  .scenario-without .outcome-text h3 { color: var(--red-800); }
+  .scenario-with .outcome-text h3 { color: var(--green-800); }
+  .outcome-text p { font-size: 15px; line-height: 1.65; }
+  .scenario-without .outcome-text p { color: var(--red-700); }
+  .scenario-with .outcome-text p { color: var(--green-700); }
+
+  /* ═══ HOW IT WORKS ═══ */
+  .how-section { background: #fff; padding: 64px 48px; }
+  .how-header { text-align: center; margin-bottom: 40px; }
+  .how-header h2 { font-size: 36px; font-weight: 800; color: var(--slate-900); letter-spacing: -1px; margin-bottom: 10px; }
+  .how-header p { font-size: 17px; color: var(--slate-500); }
+
+  .pipeline { display: flex; align-items: stretch; }
+  .pipe-step {
+    flex: 1; padding: 28px 20px;
+    border-radius: 16px; text-align: center;
+    border: 1px solid;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .pipe-step:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+  .pipe-step:nth-child(1) { background: var(--indigo-50); border-color: var(--indigo-200); }
+  .pipe-step:nth-child(3) { background: var(--amber-50); border-color: var(--amber-200); }
+  .pipe-step:nth-child(5) { background: var(--red-50); border-color: var(--red-200); }
+  .pipe-step:nth-child(7) { background: var(--green-50); border-color: var(--green-200); }
+
+  .pipe-arrow {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; color: var(--slate-300); padding: 0 12px; flex-shrink: 0;
+  }
+  .pipe-icon {
+    width: 56px; height: 56px; border-radius: 50%;
+    margin: 0 auto 12px;
+    display: flex; align-items: center; justify-content: center; font-size: 26px;
+  }
+  .pipe-step:nth-child(1) .pipe-icon { background: rgba(99,102,241,0.15); }
+  .pipe-step:nth-child(3) .pipe-icon { background: rgba(245,158,11,0.15); }
+  .pipe-step:nth-child(5) .pipe-icon { background: rgba(239,68,68,0.15); }
+  .pipe-step:nth-child(7) .pipe-icon { background: rgba(22,163,74,0.15); }
+
+  .pipe-label {
+    font-size: 11px; font-weight: 800; letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 10px;
+  }
+  .pipe-step:nth-child(1) .pipe-label { color: var(--indigo-400); }
+  .pipe-step:nth-child(3) .pipe-label { color: var(--amber-500); }
+  .pipe-step:nth-child(5) .pipe-label { color: var(--red-400); }
+  .pipe-step:nth-child(7) .pipe-label { color: var(--green-500); }
+
+  .pipe-step h3 { font-size: 17px; font-weight: 800; margin-bottom: 6px; }
+  .pipe-step:nth-child(1) h3 { color: var(--indigo-800); }
+  .pipe-step:nth-child(3) h3 { color: var(--amber-700); }
+  .pipe-step:nth-child(5) h3 { color: var(--red-800); }
+  .pipe-step:nth-child(7) h3 { color: var(--green-800); }
+
+  .pipe-step p { font-size: 14px; line-height: 1.6; }
+  .pipe-step:nth-child(1) p { color: var(--indigo-700); }
+  .pipe-step:nth-child(3) p { color: var(--amber-700); }
+  .pipe-step:nth-child(5) p { color: var(--red-700); }
+  .pipe-step:nth-child(7) p { color: var(--green-700); }
+
+  /* ═══ THREE STATES ═══ */
+  .states-section { background: var(--slate-900); padding: 64px 48px; }
+  .states-header { text-align: center; margin-bottom: 40px; }
+  .states-header h2 { font-size: 36px; font-weight: 800; color: #fff; letter-spacing: -1px; margin-bottom: 10px; }
+  .states-header p { font-size: 17px; color: var(--slate-400); line-height: 1.6; max-width: 700px; margin: 0 auto; }
+
+  .states-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  .state-card {
+    border-radius: 16px;
+    padding: 32px 24px;
+    text-align: center;
+    border: 1px solid;
+  }
+  .state-card:nth-child(1) { background: rgba(34,197,94,0.08); border-color: rgba(34,197,94,0.2); }
+  .state-card:nth-child(2) { background: rgba(251,191,36,0.08); border-color: rgba(251,191,36,0.2); }
+  .state-card:nth-child(3) { background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.2); }
+
+  .state-icon { font-size: 44px; margin-bottom: 14px; }
+  .state-card h3 { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+  .state-card:nth-child(1) h3 { color: var(--green-400); }
+  .state-card:nth-child(2) h3 { color: var(--amber-400); }
+  .state-card:nth-child(3) h3 { color: var(--red-400); }
+
+  .state-card p { font-size: 15px; line-height: 1.65; }
+  .state-card:nth-child(1) p { color: rgba(74,222,128,0.8); }
+  .state-card:nth-child(2) p { color: rgba(251,191,36,0.8); }
+  .state-card:nth-child(3) p { color: rgba(248,113,113,0.8); }
+
+  .state-badge {
+    display: inline-block;
+    font-size: 11px; font-weight: 800;
+    letter-spacing: 2px; text-transform: uppercase;
+    padding: 4px 14px; border-radius: 12px;
+    margin-bottom: 14px;
+  }
+  .state-card:nth-child(1) .state-badge { background: rgba(34,197,94,0.15); color: var(--green-400); }
+  .state-card:nth-child(2) .state-badge { background: rgba(251,191,36,0.15); color: var(--amber-400); }
+  .state-card:nth-child(3) .state-badge { background: rgba(239,68,68,0.15); color: var(--red-400); }
+
+  .states-note {
+    text-align: center;
+    margin-top: 28px;
+    font-size: 16px;
+    color: var(--slate-400);
+    font-style: italic;
+    max-width: 680px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+  }
+  .states-note strong { color: var(--amber-400); font-style: normal; }
+
+  /* ═══ REAL-WORLD ═══ */
+  .example-section { background: #111827; padding: 64px 48px; }
+  .example-header { text-align: center; margin-bottom: 36px; }
+  .example-header h2 { font-size: 34px; font-weight: 800; color: #fff; letter-spacing: -1px; margin-bottom: 10px; }
+  .example-header p { font-size: 17px; color: var(--slate-400); }
+
+  .example-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 18px; padding: 36px;
+    max-width: 960px; margin: 0 auto;
+  }
+  .example-scenario {
+    font-size: 14px; color: var(--amber-400);
+    font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; margin-bottom: 18px;
+  }
+  .example-body {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: stretch;
+  }
+  .example-col { padding: 0 24px; }
+  .example-col h3 { font-size: 19px; font-weight: 800; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid; }
+  .example-old h3 { color: var(--red-400); border-color: rgba(248,113,113,0.3); }
+  .example-new h3 { color: var(--green-400); border-color: rgba(74,222,128,0.3); }
+
+  .example-divider { width: 1px; background: rgba(255,255,255,0.1); }
+
+  .ex-step { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; }
+  .ex-time { font-size: 12px; font-weight: 700; color: var(--slate-500); min-width: 64px; padding-top: 3px; flex-shrink: 0; }
+  .ex-content { font-size: 15px; line-height: 1.55; }
+  .example-old .ex-content { color: var(--red-300); }
+  .example-new .ex-content { color: var(--green-300); }
+
+  .ex-result {
+    margin-top: 18px; padding: 16px 18px;
+    border-radius: 12px; font-size: 16px;
+    font-weight: 700; text-align: center;
+  }
+  .example-old .ex-result { background: rgba(239,68,68,0.1); color: var(--red-400); border: 1px solid rgba(239,68,68,0.2); }
+  .example-new .ex-result { background: rgba(34,197,94,0.1); color: var(--green-400); border: 1px solid rgba(34,197,94,0.2); }
+
+  /* ═══ CTA ═══ */
+  .cta-section {
+    background: linear-gradient(135deg, var(--indigo-600), var(--indigo-800));
+    padding: 56px 48px; text-align: center;
+  }
+  .cta-section h2 { font-size: 34px; font-weight: 800; color: #fff; letter-spacing: -1px; margin-bottom: 12px; }
+  .cta-section p {
+    font-size: 18px; color: rgba(255,255,255,0.75);
+    max-width: 600px; margin: 0 auto 28px; line-height: 1.65;
+  }
+  .cta-buttons { display: flex; gap: 16px; justify-content: center; }
+  .cta-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 16px 32px; border-radius: 12px; font-size: 17px; font-weight: 700;
+    text-decoration: none; cursor: pointer; border: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+  .cta-primary { background: #fff; color: var(--indigo-700); }
+  .cta-secondary { background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.25); }
+
+  .footer-bar {
+    background: var(--slate-900); padding: 24px 48px;
+    text-align: center; font-size: 14px; color: var(--slate-500);
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+
+  @media print {
+    body { background: white; }
+    .hero { padding: 36px 24px; }
+    .scenario { position: relative !important; opacity: 1 !important; transform: none !important; pointer-events: auto !important; }
+    .scenario-container { min-height: auto; }
+    .toggle-wrapper { display: none; }
+    .pipe-step:hover { transform: none; box-shadow: none; }
+  }
+</style>
+  <link rel="stylesheet" href="nav.css">
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav class="mtr-nav">
+  <div class="mtr-nav-inner">
+    <a href="index.html" class="mtr-nav-logo">Matter<span>OS</span></a>
+    <div class="mtr-nav-links">
+      <a href="index.html" class="mtr-nav-link"><span class="nav-icon">&#127968;</span> Overview</a>
+      <div class="mtr-nav-divider"></div>
+      <a href="policy-whiplash.html" class="mtr-nav-link active"><span class="nav-icon">&#127754;</span> Policy Whiplash</a>
+      <a href="command-bridge.html" class="mtr-nav-link "><span class="nav-icon">&#128207;</span> Command Bridge</a>
+      <a href="signal-authority.html" class="mtr-nav-link "><span class="nav-icon">&#127919;</span> Signal Authority</a>
+      <a href="how-it-works.html" class="mtr-nav-link"><span class="nav-icon">&#9881;&#65039;</span> How It Works</a>
+    </div>
+    <div class="mtr-nav-cta">
+      <a href="https://calendly.com/automationlegal/30min" class="btn-demo" target="_blank" rel="noopener">Request Demo &#8594;</a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <div class="hero-badge">Firm Stability Platform</div>
+  <h1>Your firm doesn't have a <span class="highlight">policy whiplash</span> problem.</h1>
+  <p class="hero-sub">It has a <strong>volatility absorption</strong> problem. Every immigration firm faces policy chaos. The question is whether your infrastructure can absorb it — or whether your attorneys have to.</p>
+</div>
+
+<!-- ═══ VOLATILITY CALLOUT ═══ -->
+<div class="volatility-bar">
+  <blockquote>"Stripe stabilizes payments. AWS stabilizes computing. MatterOS stabilizes your firm's legal execution."</blockquote>
+  <div class="attribution">— MatterOS Positioning</div>
+</div>
+
+<!-- ═══ WHAT IS IT ═══ -->
+<div class="whiplash-intro">
+  <div class="container">
+    <div class="intro-grid">
+      <div class="intro-text">
+        <h2>Policy changes don't send <span>warnings.</span></h2>
+        <p>A single executive order, USCIS memo, or court ruling can change the rules for hundreds of active cases overnight. Immigration attorneys are operating in the most volatile policy environment in living memory — nearly one federal policy change per day by late 2025.</p>
+        <p>Traditional tools were built for case management. MatterOS is built for <strong>legal orchestration</strong> — converting external chaos into internal clarity before it reaches your team.</p>
+      </div>
+      <div class="whiplash-stats">
+        <div class="stat-card">
+          <div class="stat-num">60%</div>
+          <div class="stat-label">of immigration attorneys have considered leaving due to burnout</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">3.7M</div>
+          <div class="stat-label">case backlog in immigration courts</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">$1,973</div>
+          <div class="stat-label">average retainer — lowest across all practice areas</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">#1</div>
+          <div class="stat-label">cause of malpractice claims: missed deadlines</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TOGGLE ═══ -->
+<div class="comparison-section">
+  <div class="container">
+    <div class="comparison-header">
+      <h2>When Policy Changes Hit Your Firm</h2>
+      <p>Toggle to see the difference between absorbing volatility and being consumed by it</p>
+    </div>
+
+    <div class="toggle-wrapper">
+      <span class="toggle-label label-without active" id="labelWithout">Without MatterOS</span>
+      <div class="toggle-switch" id="toggleSwitch" onclick="toggleScenario()">
+        <div class="toggle-knob"></div>
+      </div>
+      <span class="toggle-label label-with" id="labelWith">With MatterOS</span>
+    </div>
+
+    <div class="scenario-container">
+      <div class="scenario scenario-without active" id="scenarioWithout">
+        <div class="timeline">
+          <div class="tl-step">
+            <div class="tl-icon">&#128240;</div>
+            <div class="tl-time">Day 0</div>
+            <div class="tl-title">Policy Drops</div>
+            <div class="tl-desc">New USCIS memo. You find out from a listserv — maybe. Maybe not until a client calls.</div>
+          </div>
+          <div class="tl-step">
+            <div class="tl-icon">&#128561;</div>
+            <div class="tl-time">Day 1–2</div>
+            <div class="tl-title">Manual Scramble</div>
+            <div class="tl-desc">Staff digs through spreadsheets, emails, memory. The attorney is the only one who knows which cases are affected.</div>
+          </div>
+          <div class="tl-step">
+            <div class="tl-icon">&#128556;</div>
+            <div class="tl-time">Day 3–5</div>
+            <div class="tl-title">Cases Slip</div>
+            <div class="tl-desc">Missed deadlines surface. Some cases weren't flagged. Client calls pour in. Families are scared.</div>
+          </div>
+          <div class="tl-step">
+            <div class="tl-icon">&#128293;</div>
+            <div class="tl-time">Day 6–10</div>
+            <div class="tl-title">Damage Control</div>
+            <div class="tl-desc">Emergency re-filings. Difficult client conversations. Unbillable hours multiply.</div>
+          </div>
+          <div class="tl-step">
+            <div class="tl-icon">&#128176;</div>
+            <div class="tl-time">Day 10+</div>
+            <div class="tl-title">Consequences</div>
+            <div class="tl-desc">Lost revenue. Malpractice exposure. A family's livelihood at risk. Attorney burnout deepens.</div>
+          </div>
+        </div>
+        <div class="outcome-banner">
+          <div class="outcome-icon">&#9888;&#65039;</div>
+          <div class="outcome-text">
+            <h3>The attorney absorbs all the volatility personally</h3>
+            <p>Information is scattered. The attorney is the bottleneck — the human database. Every policy change is a fire drill. The system doesn't help because it was built for forms and billing, not for absorbing chaos.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="scenario scenario-with" id="scenarioWith">
+        <div class="timeline">
+          <div class="tl-step">
+            <div class="tl-icon">&#128225;</div>
+            <div class="tl-time">Hour 0</div>
+            <div class="tl-title">Signal Detected</div>
+            <div class="tl-desc">MatterOS's Volatility Engine ingests the policy change. Logged permanently in the event ledger.</div>
+          </div>
+          <div class="tl-step">
+            <div class="tl-icon">&#128269;</div>
+            <div class="tl-time">Hour 1</div>
+            <div class="tl-title">Exposure Mapped</div>
+            <div class="tl-desc">Risk Engine cross-references the change against every active matter. Deterministic rules — not AI guessing.</div>
+          </div>
+          <div class="tl-step">
+            <div class="tl-icon">&#128680;</div>
+            <div class="tl-time">Hour 2</div>
+            <div class="tl-title">Watch Mode Active</div>
+            <div class="tl-desc">Affected cases surfaced with exposure scores. Silence is a feature — only what matters reaches you.</div>
+          </div>
+          <div class="tl-step">
+            <div class="tl-icon">&#128221;</div>
+            <div class="tl-time">Day 1</div>
+            <div class="tl-title">Strategy Updated</div>
+            <div class="tl-desc">Attorney reviews prioritized list. Updates strategy. PolicySnapshot captures the reasoning — court-ready.</div>
+          </div>
+          <div class="tl-step">
+            <div class="tl-icon">&#9989;</div>
+            <div class="tl-time">Day 2</div>
+            <div class="tl-title">Firm Protected</div>
+            <div class="tl-desc">All cases addressed. Full audit trail. Staff self-served. Your mind can actually turn off tonight.</div>
+          </div>
+        </div>
+        <div class="outcome-banner">
+          <div class="outcome-icon">&#128170;</div>
+          <div class="outcome-text">
+            <h3>The infrastructure absorbs the volatility — not you</h3>
+            <p>The system caught the change before you read the newsletter. Staff self-served the affected case list. You focused on legal strategy — the thing only you can do. Every decision is recorded with reasoning. This is what a Firm Stability Platform does.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ HOW IT WORKS ═══ -->
+<div class="how-section">
+  <div class="container">
+    <div class="how-header">
+      <h2>The Volatility Engine Pipeline</h2>
+      <p>Four stages — deterministic rules you can explain to a judge, not black-box AI you can't</p>
+    </div>
+    <div class="pipeline">
+      <div class="pipe-step">
+        <div class="pipe-label">Detect</div>
+        <div class="pipe-icon">&#128225;</div>
+        <h3>Signal Captured</h3>
+        <p>External policy change logged as an immutable event. The ledger never forgets. Never overwrites.</p>
+      </div>
+      <div class="pipe-arrow">&#10132;</div>
+      <div class="pipe-step">
+        <div class="pipe-label">Classify</div>
+        <div class="pipe-icon">&#128269;</div>
+        <h3>Exposure Mapped</h3>
+        <p>Deterministic IF/THEN rules cross-reference the change against every active matter in your firm.</p>
+      </div>
+      <div class="pipe-arrow">&#10132;</div>
+      <div class="pipe-step">
+        <div class="pipe-label">Surface</div>
+        <div class="pipe-icon">&#128680;</div>
+        <h3>Risk Scored</h3>
+        <p>Each affected case gets an exposure score. Highest-risk matters surface first. Signal, not noise.</p>
+      </div>
+      <div class="pipe-arrow">&#10132;</div>
+      <div class="pipe-step">
+        <div class="pipe-label">Protect</div>
+        <div class="pipe-icon">&#128737;&#65039;</div>
+        <h3>Decision Anchored</h3>
+        <p>Your response is captured as a PolicySnapshot — the "why" behind every decision, permanently linked to the policy state.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ THREE STATES ═══ -->
+<div class="states-section">
+  <div class="container">
+    <div class="states-header">
+      <h2>Three States, Not Two</h2>
+      <p>Most systems only know "fine" or "red alert." MatterOS introduces a third state that changes everything.</p>
+    </div>
+    <div class="states-grid">
+      <div class="state-card">
+        <div class="state-badge">Stable</div>
+        <div class="state-icon">&#9898;</div>
+        <h3>All Clear</h3>
+        <p>No active exposure. No approaching deadlines. The system is quiet because there's nothing to say. Silence is a feature.</p>
+      </div>
+      <div class="state-card">
+        <div class="state-badge">Watching</div>
+        <div class="state-icon">&#128992;</div>
+        <h3>Watch Mode</h3>
+        <p>Active watchfulness. Something shifted externally. MatterOS is absorbing the volatility, mapping exposure, before it reaches you.</p>
+      </div>
+      <div class="state-card">
+        <div class="state-badge">Action Required</div>
+        <div class="state-icon">&#128308;</div>
+        <h3>Escalation</h3>
+        <p>A matter needs your judgment now. Not a noisy alert — a precise, scored signal with full context and a clear audit trail.</p>
+      </div>
+    </div>
+    <p class="states-note">The magic is in <strong>Watch Mode</strong>. Traditional tools skip straight from silence to panic. MatterOS gives your firm the ability to absorb volatility before it becomes a crisis.</p>
+  </div>
+</div>
+
+<!-- ═══ REAL-WORLD ═══ -->
+<div class="example-section">
+  <div class="container">
+    <div class="example-header">
+      <h2>Real-World Scenario</h2>
+      <p>USCIS issues a new memo changing H-1B eligibility criteria</p>
+    </div>
+    <div class="example-card">
+      <div class="example-scenario">&#9889; H-1B Eligibility Criteria Change</div>
+      <div class="example-body">
+        <div class="example-col example-old">
+          <h3>&#10007; Traditional Firm</h3>
+          <div class="ex-step"><div class="ex-time">Mon 9am</div><div class="ex-content">Attorney reads about change in AILA newsletter</div></div>
+          <div class="ex-step"><div class="ex-time">Mon 2pm</div><div class="ex-content">Asks paralegal: "check which H-1B cases might be affected"</div></div>
+          <div class="ex-step"><div class="ex-time">Tue–Wed</div><div class="ex-content">Staff manually reviews 80+ files across multiple systems</div></div>
+          <div class="ex-step"><div class="ex-time">Thu</div><div class="ex-content">Discovers 3 cases had deadlines affected — one already passed</div></div>
+          <div class="ex-step"><div class="ex-time">Fri</div><div class="ex-content">Emergency re-filing. Client terrified. Malpractice risk.</div></div>
+          <div class="ex-result">&#128308; 5 days. 1 missed deadline. No audit trail. A family's livelihood at risk.</div>
+        </div>
+        <div class="example-divider"></div>
+        <div class="example-col example-new">
+          <h3>&#10003; MatterOS Firm</h3>
+          <div class="ex-step"><div class="ex-time">Mon 8:00</div><div class="ex-content">Volatility Engine ingests policy change automatically</div></div>
+          <div class="ex-step"><div class="ex-time">Mon 8:05</div><div class="ex-content">12 affected H-1B matters flagged with exposure scores</div></div>
+          <div class="ex-step"><div class="ex-time">Mon 9:00</div><div class="ex-content">Attorney reviews prioritized list, updates top-3 strategies</div></div>
+          <div class="ex-step"><div class="ex-time">Mon 2:00</div><div class="ex-content">Staff executes filings — guided by system, not memory</div></div>
+          <div class="ex-step"><div class="ex-time">Mon EOD</div><div class="ex-content">All cases addressed. Every decision anchored to policy state.</div></div>
+          <div class="ex-result">&#128994; Same day. Zero missed. Full audit trail. Families protected.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CTA ═══ -->
+<div class="cta-section">
+  <h2>Is your tech reducing the work — or reducing the risk?</h2>
+  <p>MatterOS doesn't just manage cases. It stabilizes your firm's entire legal execution. That's the difference between a tool and infrastructure.</p>
+  <div class="cta-buttons">
+    <a class="cta-btn cta-primary" href="https://calendly.com/automationlegal/30min" target="_blank" rel="noopener">Book a Demo &#8594;</a>
+    <a class="cta-btn cta-secondary" href="how-it-works.html">How It Works &#8594;</a>
+  </div>
+</div>
+
+<div class="footer-bar">MatterOS — The Firm Stability Platform for Immigration Law</div>
+
+<script>
+  let isOn = false;
+  function toggleScenario() {
+    isOn = !isOn;
+    const sw = document.getElementById('toggleSwitch');
+    const without = document.getElementById('scenarioWithout');
+    const withEl = document.getElementById('scenarioWith');
+    const labelW = document.getElementById('labelWithout');
+    const labelM = document.getElementById('labelWith');
+    if (isOn) {
+      sw.classList.add('on');
+      without.classList.remove('active');
+      withEl.classList.add('active');
+      labelW.classList.remove('active');
+      labelM.classList.add('active');
+    } else {
+      sw.classList.remove('on');
+      withEl.classList.remove('active');
+      without.classList.add('active');
+      labelM.classList.remove('active');
+      labelW.classList.add('active');
+    }
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Partner Command Bridge — MatterOS</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --slate-50: #f8fafc; --slate-100: #f1f5f9; --slate-200: #e2e8f0;
+    --slate-300: #cbd5e1; --slate-400: #94a3b8; --slate-500: #64748b;
+    --slate-600: #475569; --slate-700: #334155; --slate-800: #1e293b; --slate-900: #0f172a;
+    --indigo-50: #eef2ff; --indigo-100: #e0e7ff; --indigo-200: #c7d2fe;
+    --indigo-400: #818cf8; --indigo-500: #6366f1; --indigo-600: #4f46e5;
+    --indigo-700: #4338ca; --indigo-800: #3730a3; --indigo-900: #312e81;
+    --green-400: #4ade80; --green-500: #22c55e; --green-600: #16a34a; --green-700: #15803d;
+    --amber-400: #fbbf24; --amber-500: #f59e0b;
+    --red-400: #f87171; --red-500: #ef4444;
+    --cyan-400: #22d3ee; --cyan-500: #06b6d4;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--slate-900);
+    color: var(--slate-800);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ═══ HERO ═══ */
+  .hero {
+    background: linear-gradient(160deg, #0c0f1a 0%, #131631 40%, #0f172a 100%);
+    padding: 80px 48px 72px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 700px; height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(99,102,241,0.12);
+    border: 1px solid rgba(99,102,241,0.25);
+    color: var(--indigo-400);
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    padding: 8px 24px; border-radius: 24px;
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-size: 54px; font-weight: 900;
+    color: #fff; letter-spacing: -2.5px;
+    line-height: 1.08; max-width: 780px;
+    margin: 0 auto 12px;
+  }
+  .hero h1 span { color: var(--indigo-400); }
+  .hero-sub {
+    font-size: 20px; color: var(--slate-400);
+    max-width: 660px; margin: 16px auto 0;
+    line-height: 1.65;
+  }
+  .hero-sub strong { color: var(--slate-200); }
+
+  /* ═══ PHILOSOPHY ═══ */
+  .philosophy {
+    background: linear-gradient(135deg, #1e1b4b, var(--indigo-900));
+    padding: 48px;
+    text-align: center;
+  }
+  .philosophy blockquote {
+    font-size: 22px; font-weight: 600;
+    color: rgba(255,255,255,0.9);
+    max-width: 800px; margin: 0 auto;
+    line-height: 1.6; font-style: italic;
+  }
+  .philosophy .attr {
+    font-size: 14px; color: var(--indigo-400);
+    margin-top: 14px; font-weight: 600; font-style: normal;
+  }
+
+  /* ═══ FIVE LAYERS ═══ */
+  .layers-section { background: #fff; padding: 72px 48px; }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  .layers-header { text-align: center; margin-bottom: 48px; }
+  .layers-header h2 {
+    font-size: 40px; font-weight: 800;
+    color: var(--slate-900); letter-spacing: -1.5px;
+    margin-bottom: 12px;
+  }
+  .layers-header p { font-size: 18px; color: var(--slate-500); line-height: 1.6; max-width: 680px; margin: 0 auto; }
+
+  .layers-stack { display: flex; flex-direction: column; gap: 0; }
+
+  .layer-row {
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    gap: 0;
+    position: relative;
+  }
+
+  .layer-spine {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+  .layer-dot {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 900; color: #fff;
+    position: relative; z-index: 2;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+  }
+  .layer-line {
+    width: 3px; flex: 1;
+    background: var(--slate-200);
+  }
+  .layer-row:last-child .layer-line { display: none; }
+
+  .layer-card {
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 16px;
+    border: 1px solid;
+    position: relative;
+    transition: transform 0.2s;
+  }
+  .layer-card:hover { transform: translateX(4px); }
+
+  .layer-card h3 { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+  .layer-card .layer-sub { font-size: 14px; font-weight: 600; margin-bottom: 10px; }
+  .layer-card p { font-size: 16px; line-height: 1.7; }
+  .layer-card .layer-detail { font-size: 14px; line-height: 1.6; margin-top: 10px; padding-top: 10px; border-top: 1px solid; }
+
+  /* Layer 1 — Firm Pulse */
+  .layer-row:nth-child(1) .layer-dot { background: linear-gradient(135deg, var(--green-500), var(--green-600)); }
+  .layer-row:nth-child(1) .layer-card { background: #f0fdf4; border-color: #bbf7d0; }
+  .layer-row:nth-child(1) .layer-card h3 { color: #166534; }
+  .layer-row:nth-child(1) .layer-card .layer-sub { color: var(--green-600); }
+  .layer-row:nth-child(1) .layer-card p { color: #15803d; }
+  .layer-row:nth-child(1) .layer-card .layer-detail { color: #166534; border-color: rgba(22,163,74,0.15); }
+
+  /* Layer 2 — Exposure Window */
+  .layer-row:nth-child(2) .layer-dot { background: linear-gradient(135deg, var(--amber-400), var(--amber-500)); }
+  .layer-row:nth-child(2) .layer-card { background: #fffbeb; border-color: #fde68a; }
+  .layer-row:nth-child(2) .layer-card h3 { color: #92400e; }
+  .layer-row:nth-child(2) .layer-card .layer-sub { color: var(--amber-500); }
+  .layer-row:nth-child(2) .layer-card p { color: #b45309; }
+  .layer-row:nth-child(2) .layer-card .layer-detail { color: #92400e; border-color: rgba(245,158,11,0.15); }
+
+  /* Layer 3 — 48-Hour Docket */
+  .layer-row:nth-child(3) .layer-dot { background: linear-gradient(135deg, var(--indigo-500), var(--indigo-600)); }
+  .layer-row:nth-child(3) .layer-card { background: var(--indigo-50); border-color: var(--indigo-200); }
+  .layer-row:nth-child(3) .layer-card h3 { color: var(--indigo-800); }
+  .layer-row:nth-child(3) .layer-card .layer-sub { color: var(--indigo-500); }
+  .layer-row:nth-child(3) .layer-card p { color: var(--indigo-700); }
+  .layer-row:nth-child(3) .layer-card .layer-detail { color: var(--indigo-800); border-color: rgba(99,102,241,0.15); }
+
+  /* Layer 4 — Practice Health */
+  .layer-row:nth-child(4) .layer-dot { background: linear-gradient(135deg, var(--cyan-400), var(--cyan-500)); }
+  .layer-row:nth-child(4) .layer-card { background: #ecfeff; border-color: #a5f3fc; }
+  .layer-row:nth-child(4) .layer-card h3 { color: #155e75; }
+  .layer-row:nth-child(4) .layer-card .layer-sub { color: var(--cyan-500); }
+  .layer-row:nth-child(4) .layer-card p { color: #0e7490; }
+  .layer-row:nth-child(4) .layer-card .layer-detail { color: #155e75; border-color: rgba(6,182,212,0.15); }
+
+  /* Layer 5 — Operational Closure */
+  .layer-row:nth-child(5) .layer-dot { background: linear-gradient(135deg, var(--slate-600), var(--slate-700)); }
+  .layer-row:nth-child(5) .layer-card { background: var(--slate-50); border-color: var(--slate-200); }
+  .layer-row:nth-child(5) .layer-card h3 { color: var(--slate-800); }
+  .layer-row:nth-child(5) .layer-card .layer-sub { color: var(--slate-500); }
+  .layer-row:nth-child(5) .layer-card p { color: var(--slate-600); }
+  .layer-row:nth-child(5) .layer-card .layer-detail { color: var(--slate-700); border-color: rgba(100,116,139,0.15); }
+
+  /* ═══ BEFORE / AFTER ═══ */
+  .contrast-section { background: var(--slate-900); padding: 72px 48px; }
+  .contrast-header { text-align: center; margin-bottom: 40px; }
+  .contrast-header h2 { font-size: 36px; font-weight: 800; color: #fff; letter-spacing: -1px; margin-bottom: 10px; }
+  .contrast-header p { font-size: 17px; color: var(--slate-400); }
+
+  .contrast-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  .contrast-card {
+    border-radius: 16px; padding: 32px 28px;
+    border: 1px solid;
+  }
+  .contrast-old { background: rgba(239,68,68,0.06); border-color: rgba(239,68,68,0.2); }
+  .contrast-new { background: rgba(34,197,94,0.06); border-color: rgba(34,197,94,0.2); }
+
+  .contrast-card h3 { font-size: 20px; font-weight: 800; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 2px solid; }
+  .contrast-old h3 { color: var(--red-400); border-color: rgba(248,113,113,0.25); }
+  .contrast-new h3 { color: var(--green-400); border-color: rgba(74,222,128,0.25); }
+
+  .contrast-item {
+    display: flex; align-items: flex-start;
+    gap: 12px; padding: 10px 0;
+    font-size: 15px; line-height: 1.6;
+  }
+  .contrast-old .contrast-item { color: rgba(248,113,113,0.85); }
+  .contrast-new .contrast-item { color: rgba(74,222,128,0.85); }
+  .contrast-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ═══ TRUST ═══ */
+  .trust-section { background: #fff; padding: 72px 48px; }
+  .trust-header { text-align: center; margin-bottom: 40px; }
+  .trust-header h2 { font-size: 36px; font-weight: 800; color: var(--slate-900); letter-spacing: -1px; margin-bottom: 10px; }
+  .trust-header p { font-size: 17px; color: var(--slate-500); line-height: 1.6; max-width: 660px; margin: 0 auto; }
+
+  .trust-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    max-width: 880px;
+    margin: 0 auto;
+  }
+  .trust-card {
+    background: var(--slate-50);
+    border: 1px solid var(--slate-200);
+    border-radius: 16px;
+    padding: 32px 28px;
+    text-align: center;
+    transition: transform 0.2s;
+  }
+  .trust-card:hover { transform: translateY(-4px); }
+  .trust-icon { font-size: 40px; margin-bottom: 14px; }
+  .trust-card h3 { font-size: 20px; font-weight: 800; color: var(--slate-900); margin-bottom: 6px; }
+  .trust-card .trust-sub { font-size: 14px; font-weight: 600; color: var(--indigo-500); margin-bottom: 10px; }
+  .trust-card p { font-size: 15px; color: var(--slate-600); line-height: 1.65; }
+
+  /* ═══ CTA ═══ */
+  .cta-section {
+    background: linear-gradient(135deg, var(--indigo-600), var(--indigo-800));
+    padding: 56px 48px; text-align: center;
+  }
+  .cta-section h2 { font-size: 34px; font-weight: 800; color: #fff; letter-spacing: -1px; margin-bottom: 12px; }
+  .cta-section p { font-size: 18px; color: rgba(255,255,255,0.75); max-width: 620px; margin: 0 auto 28px; line-height: 1.65; }
+  .cta-buttons { display: flex; gap: 16px; justify-content: center; }
+  .cta-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 16px 32px; border-radius: 12px; font-size: 17px; font-weight: 700;
+    text-decoration: none; cursor: pointer; border: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+  .cta-primary { background: #fff; color: var(--indigo-700); }
+  .cta-secondary { background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.25); }
+
+  .footer-bar {
+    background: var(--slate-900); padding: 24px 48px;
+    text-align: center; font-size: 14px; color: var(--slate-500);
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+
+  @media print {
+    body { background: white; }
+    .hero { padding: 36px 24px; }
+    .layer-card:hover, .trust-card:hover { transform: none; }
+  }
+</style>
+  <link rel="stylesheet" href="nav.css">
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav class="mtr-nav">
+  <div class="mtr-nav-inner">
+    <a href="index.html" class="mtr-nav-logo">Matter<span>OS</span></a>
+    <div class="mtr-nav-links">
+      <a href="index.html" class="mtr-nav-link"><span class="nav-icon">&#127968;</span> Overview</a>
+      <div class="mtr-nav-divider"></div>
+      <a href="policy-whiplash.html" class="mtr-nav-link "><span class="nav-icon">&#127754;</span> Policy Whiplash</a>
+      <a href="command-bridge.html" class="mtr-nav-link active"><span class="nav-icon">&#128207;</span> Command Bridge</a>
+      <a href="signal-authority.html" class="mtr-nav-link "><span class="nav-icon">&#127919;</span> Signal Authority</a>
+      <a href="how-it-works.html" class="mtr-nav-link"><span class="nav-icon">&#9881;&#65039;</span> How It Works</a>
+    </div>
+    <div class="mtr-nav-cta">
+      <a href="https://calendly.com/automationlegal/30min" class="btn-demo" target="_blank" rel="noopener">Request Demo &#8594;</a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <div class="hero-badge">Visual Explainer</div>
+  <h1>The Partner <span>Command Bridge</span></h1>
+  <p class="hero-sub">Five intentional layers of information — designed so a managing partner can <strong>understand firm health in 30 seconds</strong> without asking anyone a single question.</p>
+</div>
+
+<!-- ═══ PHILOSOPHY ═══ -->
+<div class="philosophy">
+  <blockquote>"Most dashboards show you everything. The Command Bridge shows you only what earns the right to reach you. Silence is a feature — not a gap."</blockquote>
+  <div class="attr">— MatterOS Design Philosophy</div>
+</div>
+
+<!-- ═══ FIVE LAYERS ═══ -->
+<div class="layers-section">
+  <div class="container">
+    <div class="layers-header">
+      <h2>Five Layers of Intentional Clarity</h2>
+      <p>Each layer is designed to answer one question. Together, they give the managing partner complete situational awareness — without noise.</p>
+    </div>
+
+    <div class="layers-stack">
+
+      <div class="layer-row">
+        <div class="layer-spine">
+          <div class="layer-dot">1</div>
+          <div class="layer-line"></div>
+        </div>
+        <div class="layer-card">
+          <div class="layer-sub">Top-Level Indicator</div>
+          <h3>Firm Pulse</h3>
+          <p>A single binary signal: is the firm stable or not? Green means no active exposure, no overdue matters, no approaching deadlines that need partner attention. You see this and your mind can turn off.</p>
+          <div class="layer-detail">Answers: "Do I need to worry right now?" — Usually the answer is no. That calm is earned, not assumed.</div>
+        </div>
+      </div>
+
+      <div class="layer-row">
+        <div class="layer-spine">
+          <div class="layer-dot">2</div>
+          <div class="layer-line"></div>
+        </div>
+        <div class="layer-card">
+          <div class="layer-sub">Active Exposure</div>
+          <h3>Exposure Window</h3>
+          <p>Shows any matters currently in Watch Mode or escalation — cases with active risk that the Volatility Engine has flagged. This window is almost always empty. When it's not, every item has an exposure score and full context.</p>
+          <div class="layer-detail">Answers: "What external changes are affecting my cases right now?" — The system did the triage. You do the judgment.</div>
+        </div>
+      </div>
+
+      <div class="layer-row">
+        <div class="layer-spine">
+          <div class="layer-dot">3</div>
+          <div class="layer-line"></div>
+        </div>
+        <div class="layer-card">
+          <div class="layer-sub">Near-Term Execution</div>
+          <h3>48-Hour Docket</h3>
+          <p>Everything that needs to happen in the next two days — filings, deadlines, stage transitions. Not a task list. An execution horizon. Staff can self-serve from this without interrupting you.</p>
+          <div class="layer-detail">Answers: "What's happening in my firm this week?" — Operational clarity without status meetings.</div>
+        </div>
+      </div>
+
+      <div class="layer-row">
+        <div class="layer-spine">
+          <div class="layer-dot">4</div>
+          <div class="layer-line"></div>
+        </div>
+        <div class="layer-card">
+          <div class="layer-sub">Strategic Health</div>
+          <h3>Practice Health Snapshot</h3>
+          <p>A bird's-eye view of your practice: matters by stage, case type distribution, processing times, compliance posture. This is the view you'd show a potential partner or investor.</p>
+          <div class="layer-detail">Answers: "Is my firm healthy and growing?" — Governance-grade visibility into practice operations.</div>
+        </div>
+      </div>
+
+      <div class="layer-row">
+        <div class="layer-spine">
+          <div class="layer-dot">5</div>
+          <div class="layer-line"></div>
+        </div>
+        <div class="layer-card">
+          <div class="layer-sub">Completion Record</div>
+          <h3>Operational Closure</h3>
+          <p>A rolling summary of what's been completed — filings made, matters closed, milestones reached. This is the accountability layer. It proves not just what you did, but that the system is working.</p>
+          <div class="layer-detail">Answers: "Can I prove my firm is operating properly?" — Audit-ready documentation that builds mechanical trust.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CONTRAST ═══ -->
+<div class="contrast-section">
+  <div class="container">
+    <div class="contrast-header">
+      <h2>Dashboard vs. Command Bridge</h2>
+      <p>A dashboard shows you data. A Command Bridge gives you situational awareness.</p>
+    </div>
+    <div class="contrast-grid">
+      <div class="contrast-card contrast-old">
+        <h3>&#10007; Typical Legal Dashboard</h3>
+        <div class="contrast-item"><span class="contrast-icon">&#128680;</span>Shows everything — alerts, tasks, charts, notifications</div>
+        <div class="contrast-item"><span class="contrast-icon">&#128561;</span>More data = more noise. You tune it out.</div>
+        <div class="contrast-item"><span class="contrast-icon">&#128269;</span>You have to search for what matters</div>
+        <div class="contrast-item"><span class="contrast-icon">&#128100;</span>You're still the one connecting the dots</div>
+        <div class="contrast-item"><span class="contrast-icon">&#128337;</span>Checking it feels like more work</div>
+      </div>
+      <div class="contrast-card contrast-new">
+        <h3>&#10003; MatterOS Command Bridge</h3>
+        <div class="contrast-item"><span class="contrast-icon">&#9898;</span>Shows only what earned the right to reach you</div>
+        <div class="contrast-item"><span class="contrast-icon">&#128524;</span>Silence = everything is stable. That calm is earned.</div>
+        <div class="contrast-item"><span class="contrast-icon">&#127919;</span>What matters surfaces itself, scored and prioritized</div>
+        <div class="contrast-item"><span class="contrast-icon">&#9881;&#65039;</span>The system connects the dots. You make the judgment calls.</div>
+        <div class="contrast-item"><span class="contrast-icon">&#9889;</span>Opening it takes 30 seconds. Your mind can actually rest.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TRUST ═══ -->
+<div class="trust-section">
+  <div class="container">
+    <div class="trust-header">
+      <h2>Two Kinds of Trust</h2>
+      <p>A tool earns trust by being accurate. Infrastructure earns trust by being accurate <em>and</em> discreet. MatterOS is designed to earn both.</p>
+    </div>
+    <div class="trust-grid">
+      <div class="trust-card">
+        <div class="trust-icon">&#9989;</div>
+        <h3>Mechanical Trust</h3>
+        <div class="trust-sub">The system is accurate</div>
+        <p>Every event is logged. Every snapshot is immutable. Every risk score is deterministic and explainable. You can prove what happened, when, and under what policy. This is table stakes.</p>
+      </div>
+      <div class="trust-card">
+        <div class="trust-icon">&#128737;&#65039;</div>
+        <h3>Judgment Trust</h3>
+        <div class="trust-sub">The system is discreet</div>
+        <p>MatterOS doesn't cry wolf. When it speaks, you listen — because it has earned Signal Authority. It knows the difference between noise and signal. That discretion is what makes it foundational.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CTA ═══ -->
+<div class="cta-section">
+  <h2>See your firm in 30 seconds.</h2>
+  <p>The Command Bridge isn't a dashboard. It's situational awareness — the kind that lets a managing partner sleep at night because the system is watching.</p>
+  <div class="cta-buttons">
+    <a class="cta-btn cta-primary" href="https://calendly.com/automationlegal/30min" target="_blank" rel="noopener">Book a Demo &#8594;</a>
+    <a class="cta-btn cta-secondary" href="how-it-works.html">How It Works &#8594;</a>
+  </div>
+</div>
+
+<div class="footer-bar">MatterOS — The Firm Stability Platform for Immigration Law</div>
+
+</body>
+</html>

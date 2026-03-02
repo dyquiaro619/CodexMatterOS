@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signal Authority — MatterOS</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --slate-50: #f8fafc; --slate-100: #f1f5f9; --slate-200: #e2e8f0;
+    --slate-300: #cbd5e1; --slate-400: #94a3b8; --slate-500: #64748b;
+    --slate-600: #475569; --slate-700: #334155; --slate-800: #1e293b; --slate-900: #0f172a;
+    --indigo-50: #eef2ff; --indigo-100: #e0e7ff; --indigo-200: #c7d2fe;
+    --indigo-400: #818cf8; --indigo-500: #6366f1; --indigo-600: #4f46e5;
+    --indigo-700: #4338ca; --indigo-800: #3730a3; --indigo-900: #312e81;
+    --green-50: #f0fdf4; --green-100: #dcfce7; --green-200: #bbf7d0;
+    --green-400: #4ade80; --green-500: #22c55e; --green-600: #16a34a;
+    --red-50: #fef2f2; --red-100: #fee2e2; --red-200: #fecaca;
+    --red-400: #f87171; --red-500: #ef4444; --red-600: #dc2626; --red-700: #b91c1c;
+    --amber-50: #fffbeb; --amber-100: #fef3c7; --amber-200: #fde68a;
+    --amber-400: #fbbf24; --amber-500: #f59e0b; --amber-600: #d97706;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--slate-900);
+    color: var(--slate-800);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ═══ HERO ═══ */
+  .hero {
+    background: linear-gradient(160deg, #0c0f1a 0%, #0f172a 100%);
+    padding: 80px 48px 72px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 40%; left: 50%; transform: translate(-50%, -50%);
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(251,191,36,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(251,191,36,0.1);
+    border: 1px solid rgba(251,191,36,0.25);
+    color: var(--amber-400);
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    padding: 8px 24px; border-radius: 24px;
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-size: 54px; font-weight: 900;
+    color: #fff; letter-spacing: -2.5px;
+    line-height: 1.08; max-width: 800px;
+    margin: 0 auto 12px;
+  }
+  .hero h1 span {
+    background: linear-gradient(135deg, var(--amber-400), #fde68a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    font-size: 20px; color: var(--slate-400);
+    max-width: 680px; margin: 16px auto 0;
+    line-height: 1.65;
+  }
+  .hero-sub strong { color: var(--slate-200); }
+
+  /* ═══ CORE IDEA ═══ */
+  .core-section { background: #fff; padding: 72px 48px; }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  .core-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+  .core-text h2 {
+    font-size: 38px; font-weight: 800;
+    color: var(--slate-900); letter-spacing: -1.5px;
+    margin-bottom: 20px; line-height: 1.15;
+  }
+  .core-text h2 span { color: var(--amber-500); }
+  .core-text p {
+    font-size: 17px; color: var(--slate-600);
+    line-height: 1.8; margin-bottom: 14px;
+  }
+  .core-text p strong { color: var(--slate-800); }
+
+  .noise-meter {
+    background: var(--slate-50);
+    border: 1px solid var(--slate-200);
+    border-radius: 20px;
+    padding: 36px 32px;
+  }
+  .noise-meter h3 {
+    font-size: 18px; font-weight: 800;
+    color: var(--slate-800);
+    text-align: center; margin-bottom: 28px;
+  }
+
+  .meter-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+  .meter-label {
+    font-size: 14px; font-weight: 700;
+    min-width: 140px; text-align: right;
+  }
+  .meter-bar-wrap {
+    flex: 1; height: 36px;
+    background: var(--slate-100);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+  }
+  .meter-bar {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 1s ease;
+  }
+  .meter-value {
+    font-size: 14px; font-weight: 800;
+    min-width: 80px;
+    text-align: left;
+  }
+
+  /* Row — Typical Tools (red, matches Fire Hose card) */
+  .meter-row-red .meter-label { color: var(--red-700); }
+  .meter-row-red .meter-bar  { width: 95%; background: linear-gradient(90deg, var(--red-400), var(--red-500)); }
+  .meter-row-red .meter-value { color: var(--red-600); }
+
+  /* Row — Filtered Tools (amber, matches Silent Treatment card) */
+  .meter-row-amber .meter-label { color: var(--amber-600); }
+  .meter-row-amber .meter-bar  { width: 60%; background: linear-gradient(90deg, var(--amber-400), var(--amber-500)); }
+  .meter-row-amber .meter-value { color: var(--amber-600); }
+
+  /* Row — MatterOS (green, matches Signal Authority card) */
+  .meter-row-green .meter-label { color: #166534; }
+  .meter-row-green .meter-bar  { width: 12%; background: linear-gradient(90deg, var(--green-500), var(--green-600)); }
+  .meter-row-green .meter-value { color: #166534; }
+
+  .meter-caption {
+    text-align: center;
+    font-size: 14px;
+    color: var(--slate-500);
+    margin-top: 10px;
+    font-style: italic;
+  }
+
+  /* ═══ ANTI-PATTERNS ═══ */
+  .antipattern-section { background: var(--slate-50); padding: 72px 48px; }
+  .antipattern-header { text-align: center; margin-bottom: 44px; }
+  .antipattern-header h2 { font-size: 36px; font-weight: 800; color: var(--slate-900); letter-spacing: -1px; margin-bottom: 10px; }
+  .antipattern-header p { font-size: 17px; color: var(--slate-500); max-width: 640px; margin: 0 auto; }
+
+  .antipattern-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .ap-card {
+    border-radius: 16px;
+    padding: 28px 24px;
+    border: 1px solid;
+  }
+  .ap-card:nth-child(1) { background: var(--red-50); border-color: var(--red-200); }
+  .ap-card:nth-child(2) { background: var(--amber-50); border-color: var(--amber-200); }
+  .ap-card:nth-child(3) { background: var(--green-50); border-color: var(--green-200); }
+
+  .ap-icon { font-size: 36px; margin-bottom: 14px; }
+  .ap-card h3 { font-size: 18px; font-weight: 800; margin-bottom: 6px; }
+  .ap-card:nth-child(1) h3 { color: var(--red-700); }
+  .ap-card:nth-child(2) h3 { color: var(--amber-600); }
+  .ap-card:nth-child(3) h3 { color: #166534; }
+  .ap-badge {
+    display: inline-block;
+    font-size: 11px; font-weight: 800;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 3px 12px; border-radius: 10px;
+    margin-bottom: 12px;
+  }
+  .ap-card:nth-child(1) .ap-badge { background: rgba(239,68,68,0.1); color: var(--red-600); }
+  .ap-card:nth-child(2) .ap-badge { background: rgba(245,158,11,0.1); color: var(--amber-600); }
+  .ap-card:nth-child(3) .ap-badge { background: rgba(22,163,74,0.1); color: var(--green-600); }
+
+  .ap-card p { font-size: 15px; line-height: 1.65; }
+  .ap-card:nth-child(1) p { color: var(--red-600); }
+  .ap-card:nth-child(2) p { color: #b45309; }
+  .ap-card:nth-child(3) p { color: #15803d; }
+
+  /* ═══ HOW IT WORKS ═══ */
+  .how-section { background: var(--slate-900); padding: 72px 48px; }
+  .how-header { text-align: center; margin-bottom: 44px; }
+  .how-header h2 { font-size: 36px; font-weight: 800; color: #fff; letter-spacing: -1px; margin-bottom: 10px; }
+  .how-header p { font-size: 17px; color: var(--slate-400); max-width: 660px; margin: 0 auto; line-height: 1.6; }
+
+  .how-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .how-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 28px 22px;
+    text-align: center;
+    transition: transform 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .how-card:hover { transform: translateY(-4px); }
+  .how-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .how-card:nth-child(1)::before { background: var(--indigo-500); }
+  .how-card:nth-child(2)::before { background: var(--amber-400); }
+  .how-card:nth-child(3)::before { background: var(--green-500); }
+  .how-card:nth-child(4)::before { background: var(--indigo-400); }
+
+  .how-num {
+    font-size: 13px; font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+  .how-card:nth-child(1) .how-num { color: var(--indigo-400); }
+  .how-card:nth-child(2) .how-num { color: var(--amber-400); }
+  .how-card:nth-child(3) .how-num { color: var(--green-400); }
+  .how-card:nth-child(4) .how-num { color: var(--indigo-400); }
+
+  .how-icon { font-size: 36px; margin-bottom: 14px; }
+  .how-card h3 { font-size: 17px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+  .how-card p { font-size: 14px; color: var(--slate-400); line-height: 1.6; }
+
+  /* ═══ QUOTE ═══ */
+  .quote-section {
+    background: linear-gradient(135deg, #1e1b4b, var(--indigo-900));
+    padding: 56px 48px;
+    text-align: center;
+  }
+  .quote-section blockquote {
+    font-size: 24px; font-weight: 600;
+    color: rgba(255,255,255,0.92);
+    max-width: 780px; margin: 0 auto;
+    line-height: 1.55; font-style: italic;
+  }
+  .quote-section .attr {
+    font-size: 15px; color: var(--indigo-400);
+    margin-top: 16px; font-weight: 600; font-style: normal;
+  }
+
+  /* ═══ COMPARISON ═══ */
+  .comparison-section { background: #fff; padding: 72px 48px; }
+  .comparison-header { text-align: center; margin-bottom: 40px; }
+  .comparison-header h2 { font-size: 36px; font-weight: 800; color: var(--slate-900); letter-spacing: -1px; margin-bottom: 10px; }
+
+  .comparison-table {
+    max-width: 900px;
+    margin: 0 auto;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--slate-200);
+  }
+  .comp-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    border-bottom: 1px solid var(--slate-100);
+  }
+  .comp-row:last-child { border-bottom: none; }
+  .comp-row.header-row { background: var(--slate-900); }
+  .comp-row.header-row .comp-cell {
+    font-size: 14px; font-weight: 800;
+    color: #fff; letter-spacing: 0.5px;
+  }
+  .comp-cell {
+    padding: 18px 24px;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--slate-700);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .comp-row:nth-child(even):not(.header-row) { background: var(--slate-50); }
+  .comp-cell:first-child { font-weight: 700; color: var(--slate-800); }
+  .comp-icon { font-size: 16px; flex-shrink: 0; }
+
+  /* ═══ CTA ═══ */
+  .cta-section {
+    background: linear-gradient(135deg, var(--slate-800), var(--slate-900));
+    padding: 56px 48px; text-align: center;
+  }
+  .cta-section h2 { font-size: 34px; font-weight: 800; color: #fff; letter-spacing: -1px; margin-bottom: 12px; }
+  .cta-section p { font-size: 18px; color: rgba(255,255,255,0.65); max-width: 600px; margin: 0 auto 28px; line-height: 1.65; }
+  .cta-buttons { display: flex; gap: 16px; justify-content: center; }
+  .cta-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 16px 32px; border-radius: 12px; font-size: 17px; font-weight: 700;
+    text-decoration: none; cursor: pointer; border: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+  .cta-primary { background: var(--amber-400); color: var(--slate-900); }
+  .cta-secondary { background: rgba(255,255,255,0.08); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
+
+  .footer-bar {
+    background: var(--slate-900); padding: 24px 48px;
+    text-align: center; font-size: 14px; color: var(--slate-500);
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+
+  @media print {
+    body { background: white; }
+    .how-card:hover { transform: none; }
+  }
+</style>
+  <link rel="stylesheet" href="nav.css">
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav class="mtr-nav">
+  <div class="mtr-nav-inner">
+    <a href="index.html" class="mtr-nav-logo">Matter<span>OS</span></a>
+    <div class="mtr-nav-links">
+      <a href="index.html" class="mtr-nav-link"><span class="nav-icon">&#127968;</span> Overview</a>
+      <div class="mtr-nav-divider"></div>
+      <a href="policy-whiplash.html" class="mtr-nav-link"><span class="nav-icon">&#127754;</span> Policy Whiplash</a>
+      <a href="command-bridge.html" class="mtr-nav-link"><span class="nav-icon">&#128207;</span> Command Bridge</a>
+      <a href="signal-authority.html" class="mtr-nav-link active"><span class="nav-icon">&#127919;</span> Signal Authority</a>
+      <a href="how-it-works.html" class="mtr-nav-link"><span class="nav-icon">&#9881;&#65039;</span> How It Works</a>
+    </div>
+    <div class="mtr-nav-cta">
+      <a href="https://calendly.com/automationlegal/30min" class="btn-demo" target="_blank" rel="noopener">Request Demo &#8594;</a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <div class="hero-badge">Visual Explainer</div>
+  <h1>What is <span>Signal Authority?</span></h1>
+  <p class="hero-sub">Most legal software talks too much. MatterOS speaks rarely — but when it does, <strong>everyone listens</strong>. That's not a limitation. It's the entire point.</p>
+</div>
+
+<!-- ═══ CORE IDEA ═══ -->
+<div class="core-section">
+  <div class="container">
+    <div class="core-grid">
+      <div class="core-text">
+        <h2>The problem isn't missing <span>alerts.</span> It's alert fatigue.</h2>
+        <p>Every legal tech platform promises to "keep you informed." The result? An avalanche of notifications, badges, reminders, and status updates that attorneys learn to ignore. <strong>When everything is urgent, nothing is.</strong></p>
+        <p>Signal Authority is the principle that a system earns the right to interrupt you by proving it knows when not to. MatterOS is designed to be silent by default — so that when it speaks, it carries weight.</p>
+        <p>This isn't a feature toggle. It's an architectural philosophy that shapes every decision about what surfaces and what doesn't.</p>
+      </div>
+      <div class="noise-meter">
+        <h3>Notification Volume vs. Attorney Attention</h3>
+        <div class="meter-row meter-row-red">
+          <div class="meter-label">Typical Tools</div>
+          <div class="meter-bar-wrap"><div class="meter-bar"></div></div>
+          <div class="meter-value">~47 / day</div>
+        </div>
+        <div class="meter-row meter-row-amber">
+          <div class="meter-label">Filtered Tools</div>
+          <div class="meter-bar-wrap"><div class="meter-bar"></div></div>
+          <div class="meter-value">~18 / day</div>
+        </div>
+        <div class="meter-row meter-row-green">
+          <div class="meter-label">MatterOS</div>
+          <div class="meter-bar-wrap"><div class="meter-bar"></div></div>
+          <div class="meter-value">2–3 / week</div>
+        </div>
+        <p class="meter-caption">Fewer signals = each signal carries more weight</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ANTI-PATTERNS ═══ -->
+<div class="antipattern-section">
+  <div class="container">
+    <div class="antipattern-header">
+      <h2>Three Approaches to Alerting</h2>
+      <p>Most systems get this wrong in one of two ways. MatterOS takes a third path.</p>
+    </div>
+    <div class="antipattern-grid">
+      <div class="ap-card">
+        <div class="ap-badge">Anti-Pattern</div>
+        <div class="ap-icon">&#128680;</div>
+        <h3>The Fire Hose</h3>
+        <p>Alerts for everything. 47 notifications a day. Calendar reminders, status changes, FYI updates. Attorneys learn to ignore them all — including the ones that actually matter.</p>
+      </div>
+      <div class="ap-card">
+        <div class="ap-badge">Anti-Pattern</div>
+        <div class="ap-icon">&#128584;</div>
+        <h3>The Silent Treatment</h3>
+        <p>No proactive alerting. The system waits for you to check. Problems are discovered by accident — or by the client calling to ask why their case hasn't moved. Reactive by design.</p>
+      </div>
+      <div class="ap-card">
+        <div class="ap-badge">MatterOS Approach</div>
+        <div class="ap-icon">&#127919;</div>
+        <h3>Signal Authority</h3>
+        <p>The system speaks only when it has earned the right to. Every alert is scored, contextualized, and delivered with the full audit trail. Silence means stability. A signal means act now.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ HOW IT WORKS ═══ -->
+<div class="how-section">
+  <div class="container">
+    <div class="how-header">
+      <h2>How Signal Authority Works</h2>
+      <p>Four design principles that determine what reaches you — and what the system absorbs quietly.</p>
+    </div>
+    <div class="how-grid">
+      <div class="how-card">
+        <div class="how-num">PRINCIPLE 1</div>
+        <div class="how-icon">&#128269;</div>
+        <h3>Deterministic Rules</h3>
+        <p>Only IF/THEN rules fire alerts — not AI guessing. Every alert can be explained to a judge. "IF deadline within 7 days, THEN surface." Clear, auditable, trustworthy.</p>
+      </div>
+      <div class="how-card">
+        <div class="how-num">PRINCIPLE 2</div>
+        <div class="how-icon">&#128200;</div>
+        <h3>Exposure Scoring</h3>
+        <p>Not all risks are equal. Each alert carries an exposure score based on deadline proximity, case complexity, and policy volatility. High-exposure matters surface first. Low-exposure stays in Watch Mode.</p>
+      </div>
+      <div class="how-card">
+        <div class="how-num">PRINCIPLE 3</div>
+        <div class="how-icon">&#128737;&#65039;</div>
+        <h3>Absorption Layer</h3>
+        <p>Watch Mode absorbs volatility before it reaches you. External signals are ingested, classified, and mapped — but only escalated when they cross the threshold. The system does the worrying.</p>
+      </div>
+      <div class="how-card">
+        <div class="how-num">PRINCIPLE 4</div>
+        <div class="how-icon">&#128221;</div>
+        <h3>Full Context</h3>
+        <p>When a signal does reach you, it arrives with everything: the triggering event, affected matters, exposure score, relevant policy state, and recommended action. No hunting. No guessing.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ QUOTE ═══ -->
+<div class="quote-section">
+  <blockquote>"When MatterOS is quiet, it means your firm is stable. When it speaks, it means something specific needs your judgment. That relationship — between silence and signal — is what builds foundational trust."</blockquote>
+  <div class="attr">— MatterOS Design Philosophy</div>
+</div>
+
+<!-- ═══ COMPARISON TABLE ═══ -->
+<div class="comparison-section">
+  <div class="container">
+    <div class="comparison-header">
+      <h2>Signal Authority in Practice</h2>
+    </div>
+    <div class="comparison-table">
+      <div class="comp-row header-row">
+        <div class="comp-cell">Scenario</div>
+        <div class="comp-cell">Typical Tool</div>
+        <div class="comp-cell">MatterOS</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-cell">Client uploads a document</div>
+        <div class="comp-cell"><span class="comp-icon">&#128680;</span> Badge + email + push notification</div>
+        <div class="comp-cell"><span class="comp-icon">&#128524;</span> Logged silently. No alert needed.</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-cell">Case stage changes</div>
+        <div class="comp-cell"><span class="comp-icon">&#128680;</span> Status update alert to 4 people</div>
+        <div class="comp-cell"><span class="comp-icon">&#128524;</span> Event recorded. Visible on 48hr docket.</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-cell">RFE deadline in 7 days</div>
+        <div class="comp-cell"><span class="comp-icon">&#128680;</span> Calendar reminder (among 15 others)</div>
+        <div class="comp-cell"><span class="comp-icon">&#127919;</span> Scored alert with full context. You act.</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-cell">Policy change affects 12 cases</div>
+        <div class="comp-cell"><span class="comp-icon">&#128584;</span> Nothing. You find out on your own.</div>
+        <div class="comp-cell"><span class="comp-icon">&#127919;</span> Exposure mapped. Prioritized list surfaced.</div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-cell">No issues for 3 weeks</div>
+        <div class="comp-cell"><span class="comp-icon">&#128680;</span> Still sends daily "summary" emails</div>
+        <div class="comp-cell"><span class="comp-icon">&#9898;</span> Silence. Your mind can rest.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CTA ═══ -->
+<div class="cta-section">
+  <h2>What if silence meant your firm was stable?</h2>
+  <p>Signal Authority means MatterOS earns the right to interrupt you. When it's quiet, everything is handled. When it speaks, you know it matters.</p>
+  <div class="cta-buttons">
+    <a class="cta-btn cta-primary" href="https://calendly.com/automationlegal/30min" target="_blank" rel="noopener">Book a Demo &#8594;</a>
+    <a class="cta-btn cta-secondary" href="how-it-works.html">How It Works &#8594;</a>
+  </div>
+</div>
+
+<div class="footer-bar">MatterOS — The Firm Stability Platform for Immigration Law</div>
+
+</body>
+</html>

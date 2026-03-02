@@ -12,11 +12,11 @@ const PRIMARY_ITEMS = [
 ] as const;
 
 const LEARN_ITEMS = [
-  { href: "/overview", label: "1. Overview" },
-  { href: "/how-it-works", label: "2. How It Works" },
-  { href: "/policy-whiplash", label: "3. Policy Whiplash" },
-  { href: "/signal-authority", label: "4. Signal Authority" },
-  { href: "/command-bridge", label: "5. Command Bridge Explainer" }
+  { href: "/landing/index.html", label: "Overview" },
+  { href: "/landing/how-it-works.html", label: "How It Works" },
+  { href: "/landing/policy-whiplash.html", label: "Policy Whiplash" },
+  { href: "/landing/signal-authority.html", label: "Signal Authority" },
+  { href: "/landing/command-bridge.html", label: "Command Bridge" }
 ] as const;
 
 export function TopNav() {

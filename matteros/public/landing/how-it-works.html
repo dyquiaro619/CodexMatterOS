@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How It Works — MatterOS</title>
+<link rel="stylesheet" href="nav.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #080A12;
+    color: #F1F0EC;
+    font-family: 'Inter', -apple-system, sans-serif;
+    min-height: 100vh;
+  }
+
+  ::selection { background: rgba(99, 102, 241, 0.3); }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ═══ HERO ═══ */
+  .hiw-hero {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 100px 24px 80px;
+    animation: fadeUp 0.8s ease;
+  }
+  .hiw-hero-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+  .hiw-hero-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #6366F1;
+    box-shadow: 0 0 12px rgba(99,102,241,0.4);
+  }
+  .hiw-hero-label {
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+  }
+  .hiw-hero h1 {
+    font-size: 54px;
+    font-weight: 900;
+    font-family: 'Inter', -apple-system, sans-serif;
+    line-height: 1.1;
+    letter-spacing: -2px;
+    max-width: 800px;
+    margin-bottom: 24px;
+  }
+  .hiw-hero h1 span { color: rgba(255,255,255,0.3); }
+  .hiw-hero-sub {
+    font-size: 20px;
+    line-height: 1.65;
+    color: rgba(255,255,255,0.45);
+    max-width: 620px;
+    font-weight: 400;
+  }
+  .hiw-hero-sub em { color: rgba(255,255,255,0.7); font-style: italic; }
+
+  /* ═══ SECTIONS ═══ */
+  .hiw-section {
+    padding: 80px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .hiw-section-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .hiw-section-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .hiw-section-num {
+    color: rgba(255,255,255,0.2);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+  }
+  .hiw-section-icon {
+    color: rgba(255,255,255,0.35);
+    display: flex;
+    align-items: center;
+  }
+  .hiw-section h2 {
+    font-size: 36px;
+    font-weight: 800;
+    color: #F1F0EC;
+    font-family: 'Inter', -apple-system, sans-serif;
+    line-height: 1.15;
+    margin-bottom: 10px;
+    letter-spacing: -1px;
+  }
+  .hiw-section-sub {
+    font-size: 17px;
+    color: rgba(255,255,255,0.45);
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    margin-bottom: 32px;
+    max-width: 600px;
+    line-height: 1.6;
+  }
+  .hiw-section-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+  .hiw-section-body.no-visual {
+    grid-template-columns: 1fr;
+  }
+  @media (max-width: 768px) {
+    .hiw-section-body { grid-template-columns: 1fr !important; }
+  }
+  .hiw-section-text {
+    font-size: 16px;
+    line-height: 1.75;
+    color: rgba(255,255,255,0.6);
+    font-family: 'Inter', sans-serif;
+  }
+  .hiw-section-text p + p { margin-top: 16px; }
+  .hiw-section-text strong { color: rgba(255,255,255,0.85); }
+
+  /* ═══ BLOCKQUOTE CALLOUT ═══ */
+  .hiw-callout {
+    margin-top: 24px;
+    padding: 16px 20px;
+    background: rgba(139, 92, 246, 0.06);
+    border-left: 2px solid rgba(139, 92, 246, 0.3);
+    border-radius: 0 8px 8px 0;
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.7;
+  }
+  .hiw-callout strong { color: #A78BFA; font-weight: 500; }
+
+  .hiw-principle {
+    margin-top: 32px;
+    padding: 20px 24px;
+    background: rgba(99, 102, 241, 0.05);
+    border-radius: 10px;
+    border: 1px solid rgba(99, 102, 241, 0.12);
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.8;
+  }
+  .hiw-principle strong { color: #A5B4FC; font-weight: 500; }
+
+  /* ═══ FEATURE GRID ═══ */
+  .hiw-feature-grid {
+    margin-top: 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 600px) {
+    .hiw-feature-grid { grid-template-columns: 1fr; }
+  }
+  .hiw-feature-item {
+    padding: 14px 16px;
+    background: rgba(255,255,255,0.02);
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+  .hiw-feature-item-label {
+    font-size: 13px;
+    color: rgba(255,255,255,0.75);
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .hiw-feature-item-desc {
+    font-size: 12px;
+    color: rgba(255,255,255,0.35);
+    line-height: 1.5;
+  }
+
+  /* ═══ EVENT LEDGER ═══ */
+  .ledger-box {
+    background: #0C0F1A;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 20px 0;
+    font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+    font-size: 13px;
+    overflow: hidden;
+    min-height: 280px;
+  }
+  .ledger-header {
+    padding: 0 20px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    margin-bottom: 8px;
+  }
+  .ledger-header-title {
+    color: rgba(255,255,255,0.35);
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .ledger-header-badge {
+    color: rgba(255,255,255,0.2);
+    font-size: 10px;
+  }
+  .ledger-row {
+    display: grid;
+    grid-template-columns: 80px 100px 1fr auto;
+    gap: 12px;
+    padding: 8px 20px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all 0.4s ease;
+    margin-left: 18px;
+    align-items: center;
+    border-left: 2px solid transparent;
+  }
+  .ledger-row.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .ledger-time { color: rgba(255,255,255,0.3); }
+  .ledger-actor { color: rgba(255,255,255,0.5); }
+  .ledger-action { color: rgba(255,255,255,0.85); }
+  .ledger-stage-badge {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+
+  /* ═══ STAGE PIPELINE ═══ */
+  .stage-box {
+    background: #0C0F1A;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 24px;
+    overflow: hidden;
+  }
+  .stage-pipeline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0;
+  }
+  .stage-item {
+    display: flex;
+    align-items: center;
+  }
+  .stage-node-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0.25;
+    transition: all 0.5s ease;
+  }
+  .stage-node-wrap.active-or-past {
+    opacity: 1;
+  }
+  .stage-circle {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.5s ease;
+  }
+  .stage-pulse-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #fff;
+    animation: pulse 1.5s ease infinite;
+  }
+  .stage-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.25);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.3px;
+    transition: color 0.5s ease;
+    white-space: nowrap;
+  }
+  .stage-label.lit {
+    color: rgba(255,255,255,0.8);
+  }
+  .stage-connector {
+    width: 40px; height: 2px;
+    background: rgba(255,255,255,0.08);
+    transition: background 0.5s ease;
+    margin: 0 4px;
+    margin-bottom: 24px;
+  }
+  .stage-validated {
+    margin-top: 20px;
+    padding: 10px 16px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: rgba(255,255,255,0.5);
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .stage-validated svg { flex-shrink: 0; }
+
+  /* ═══ RISK DASHBOARD ═══ */
+  .risk-box {
+    background: #0C0F1A;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+    overflow: hidden;
+    font-family: 'JetBrains Mono', 'SF Mono', monospace;
+    font-size: 13px;
+  }
+  .risk-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .risk-header-title {
+    color: rgba(255,255,255,0.35);
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .risk-indicator {
+    color: #EF4444;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .risk-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #EF4444;
+    display: inline-block;
+    animation: pulse 2s ease infinite;
+  }
+  .risk-row {
+    display: grid;
+    grid-template-columns: 64px 1fr 140px 80px auto;
+    gap: 12px;
+    padding: 12px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    align-items: center;
+  }
+  .risk-row:last-child { border-bottom: none; }
+  .risk-row.critical-row { background: rgba(239,68,68,0.03); }
+  .risk-id { color: rgba(255,255,255,0.4); }
+  .risk-client { color: rgba(255,255,255,0.8); }
+  .risk-type { color: rgba(255,255,255,0.45); }
+  .risk-days { color: rgba(255,255,255,0.35); font-size: 12px; }
+  .risk-badge {
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.8px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  @media (max-width: 600px) {
+    .risk-row { grid-template-columns: 56px 1fr auto; }
+    .risk-type, .risk-days { display: none; }
+  }
+
+  /* ═══ FOOTER / CTA ═══ */
+  .hiw-footer {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 100px 24px 120px;
+    text-align: center;
+  }
+  .hiw-footer h2 {
+    font-size: 38px;
+    font-weight: 800;
+    font-family: 'Inter', -apple-system, sans-serif;
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+    line-height: 1.15;
+  }
+  .hiw-footer p {
+    font-size: 17px;
+    color: rgba(255,255,255,0.45);
+    max-width: 480px;
+    margin: 0 auto 40px;
+    line-height: 1.7;
+    font-weight: 400;
+  }
+  .hiw-cta-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .hiw-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    padding: 14px 32px;
+    background: #6366F1;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.3px;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  .hiw-btn-primary:hover {
+    background: #818CF8;
+    transform: translateY(-1px);
+  }
+  .hiw-btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    padding: 14px 32px;
+    background: transparent;
+    color: rgba(255,255,255,0.6);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 400;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.3px;
+    text-decoration: none;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+  .hiw-btn-ghost:hover {
+    border-color: rgba(255,255,255,0.25);
+    color: rgba(255,255,255,0.8);
+  }
+  .hiw-copyright {
+    margin-top: 48px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.15);
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav class="mtr-nav">
+  <div class="mtr-nav-inner">
+    <a href="index.html" class="mtr-nav-logo">Matter<span>OS</span></a>
+    <div class="mtr-nav-links">
+      <a href="index.html" class="mtr-nav-link"><span class="nav-icon">&#127968;</span> Overview</a>
+      <div class="mtr-nav-divider"></div>
+      <a href="policy-whiplash.html" class="mtr-nav-link"><span class="nav-icon">&#127754;</span> Policy Whiplash</a>
+      <a href="command-bridge.html" class="mtr-nav-link"><span class="nav-icon">&#128207;</span> Command Bridge</a>
+      <a href="signal-authority.html" class="mtr-nav-link"><span class="nav-icon">&#127919;</span> Signal Authority</a>
+      <a href="how-it-works.html" class="mtr-nav-link active"><span class="nav-icon">&#9881;&#65039;</span> How It Works</a>
+    </div>
+    <div class="mtr-nav-cta">
+      <a href="https://calendly.com/automationlegal/30min" class="btn-demo" target="_blank" rel="noopener">Request Demo &#8594;</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<header class="hiw-hero">
+  <div class="hiw-hero-badge">
+    <div class="hiw-hero-dot"></div>
+    <span class="hiw-hero-label">MatterOS</span>
+  </div>
+  <h1>
+    How it works.<br>
+    <span>And why that matters.</span>
+  </h1>
+  <p class="hiw-hero-sub">
+    In immigration law, you can't afford to trust a system you can't explain.
+    MatterOS is built so every action, every decision, and every deadline
+    is structurally accounted for — not just logged, but <em>provable</em>.
+  </p>
+</header>
+
+<!-- ═══ DIVIDER ═══ -->
+<div style="max-width:1100px;margin:0 auto;padding:0 24px;">
+  <hr style="border:none;border-top:1px solid rgba(255,255,255,0.08);margin:0;">
+</div>
+
+<!-- ═══ SECTION 01: Audit Trail ═══ -->
+<section class="hiw-section">
+  <div class="hiw-section-inner">
+    <div class="hiw-section-meta">
+      <span class="hiw-section-num">01</span>
+      <span class="hiw-section-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L3 7v5c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </div>
+    <h2>Every decision has a paper trail</h2>
+    <p class="hiw-section-sub">If you're ever asked to prove what happened on a matter and when — this is how.</p>
+    <div class="hiw-section-body">
+      <div class="hiw-section-text">
+        <p>Every action taken on a matter — stage changes, document uploads, risk flags, policy attachments — is recorded in an <strong>append-only event ledger</strong>.</p>
+        <p>Entries cannot be edited, backdated, or deleted. Each event is timestamped and recorded with its full context. The result is a complete, tamper-proof history of every matter — from intake to resolution.</p>
+        <p>When a client asks what happened, when a regulator requests documentation, or when your firm needs to demonstrate due diligence — the ledger is your definitive answer.</p>
+      </div>
+      <div>
+        <!-- Animated Ledger -->
+        <div class="ledger-box" id="ledger-container">
+          <div class="ledger-header">
+            <span class="ledger-header-title">Event Ledger — Matter #1042</span>
+            <span class="ledger-header-badge">APPEND-ONLY · IMMUTABLE</span>
+          </div>
+          <div class="ledger-row" data-index="0" style="border-left-color: #3B82F6;">
+            <span class="ledger-time">09:14 AM</span>
+            <span class="ledger-actor">Attorney</span>
+            <span class="ledger-action">Matter opened</span>
+            <span class="ledger-stage-badge" style="background: rgba(59,130,246,0.08); color: #3B82F6;">INTAKE</span>
+          </div>
+          <div class="ledger-row" data-index="1" style="border-left-color: #8B5CF6;">
+            <span class="ledger-time">09:41 AM</span>
+            <span class="ledger-actor">System</span>
+            <span class="ledger-action">Policy snapshot captured</span>
+            <span class="ledger-stage-badge" style="background: rgba(139,92,246,0.08); color: #8B5CF6;">INTAKE</span>
+          </div>
+          <div class="ledger-row" data-index="2" style="border-left-color: #F59E0B;">
+            <span class="ledger-time">10:02 AM</span>
+            <span class="ledger-actor">Attorney</span>
+            <span class="ledger-action">Stage → DOCUMENT_REVIEW</span>
+            <span class="ledger-stage-badge" style="background: rgba(245,158,11,0.08); color: #F59E0B;">DOC REVIEW</span>
+          </div>
+          <div class="ledger-row" data-index="3" style="border-left-color: #10B981;">
+            <span class="ledger-time">11:15 AM</span>
+            <span class="ledger-actor">Paralegal</span>
+            <span class="ledger-action">Evidence packet uploaded</span>
+            <span class="ledger-stage-badge" style="background: rgba(16,185,129,0.08); color: #10B981;">DOC REVIEW</span>
+          </div>
+          <div class="ledger-row" data-index="4" style="border-left-color: #EC4899;">
+            <span class="ledger-time">01:30 PM</span>
+            <span class="ledger-actor">Attorney</span>
+            <span class="ledger-action">Stage → FILING_PREP</span>
+            <span class="ledger-stage-badge" style="background: rgba(236,72,153,0.08); color: #EC4899;">FILING PREP</span>
+          </div>
+          <div class="ledger-row" data-index="5" style="border-left-color: #EF4444;">
+            <span class="ledger-time">02:45 PM</span>
+            <span class="ledger-actor">System</span>
+            <span class="ledger-action">Risk flag: deadline in 5 days</span>
+            <span class="ledger-stage-badge" style="background: rgba(239,68,68,0.08); color: #EF4444;">FILING PREP</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SECTION 02: Policy Snapshots ═══ -->
+<section class="hiw-section">
+  <div class="hiw-section-inner">
+    <div class="hiw-section-meta">
+      <span class="hiw-section-num">02</span>
+      <span class="hiw-section-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L2 7l10 5 10-5-10-5z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M2 17l10 5 10-5" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M2 12l10 5 10-5" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </div>
+    <h2>Policy context is locked in</h2>
+    <p class="hiw-section-sub">When the rules change tomorrow, you'll know exactly which rules applied today.</p>
+    <div class="hiw-section-body no-visual">
+      <div class="hiw-section-text">
+        <p>Immigration policy shifts daily. When your team makes a decision on a matter, MatterOS captures a <strong>policy snapshot</strong> — a permanent record of the regulatory environment at that moment.</p>
+        <p>This means you can always trace any action back to the specific rules that were in effect when it was taken. When guidance changes and a client's case is questioned months later, you're not reconstructing from memory — you have the receipts.</p>
+        <div class="hiw-callout">
+          <strong>In practice:</strong> A USCIS policy memo changes the evidentiary standard for national interest waivers.
+          Because every decision in MatterOS is linked to the policy snapshot in effect at the time,
+          your team can trace exactly which matters were filed under the prior standard —
+          and act accordingly, without scrambling to reconstruct what happened.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SECTION 03: Stage Machine ═══ -->
+<section class="hiw-section">
+  <div class="hiw-section-inner">
+    <div class="hiw-section-meta">
+      <span class="hiw-section-num">03</span>
+      <span class="hiw-section-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M7 11V7a5 5 0 0110 0v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </span>
+    </div>
+    <h2>Cases follow defined pathways</h2>
+    <p class="hiw-section-sub">The system validates every transition to ensure no stage is skipped.</p>
+    <div class="hiw-section-body">
+      <div class="hiw-section-text">
+        <p>Every matter in MatterOS follows a <strong>controlled stage sequence</strong>. Transitions between stages are validated — the system enforces which moves are permitted, ensuring cases progress through a defined pathway rather than jumping ahead or skipping steps.</p>
+        <p>This isn't a calendar reminder that can be snoozed. It's a structural guardrail built into the system's transition logic. If a stage change isn't a valid move, it's rejected — preventing the kind of procedural shortcuts that lead to missed steps and malpractice exposure.</p>
+        <p>Your team works with confidence that no matter how busy the day gets, the process integrity holds.</p>
+      </div>
+      <div>
+        <!-- Stage Pipeline -->
+        <div class="stage-box" id="stage-container">
+          <div class="stage-pipeline" id="stage-pipeline">
+            <!-- Stages rendered by JS -->
+          </div>
+          <div class="stage-validated">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <rect x="3" y="11" width="18" height="11" rx="2" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+              <path d="M7 11V7a5 5 0 0110 0v4" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            Transition validated — only permitted stage moves are accepted
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SECTION 04: Risk Detection ═══ -->
+<section class="hiw-section">
+  <div class="hiw-section-inner">
+    <div class="hiw-section-meta">
+      <span class="hiw-section-num">04</span>
+      <span class="hiw-section-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </div>
+    <h2>Risk is detected, not reported after the fact</h2>
+    <p class="hiw-section-sub">You see which matters need attention before they become problems.</p>
+    <div class="hiw-section-body">
+      <div class="hiw-section-text">
+        <p>MatterOS applies <strong>deterministic risk scoring</strong> to every active matter. At-risk flags are triggered by defined criteria — not gut feeling, not manual review. The system surfaces matters that need attention based on rules your firm sets.</p>
+        <p>A firm-wide governance dashboard gives managing partners and team leads real-time visibility across the entire caseload. You don't need to ask each attorney for a status update. You can see it.</p>
+        <p>Early detection means early intervention — before a deadline becomes a denial, and before a delay becomes a complaint.</p>
+      </div>
+      <div>
+        <!-- Risk Dashboard -->
+        <div class="risk-box">
+          <div class="risk-header">
+            <span class="risk-header-title">Risk Detection — Active Matters</span>
+            <span class="risk-indicator"><span class="risk-dot"></span> 1 at risk</span>
+          </div>
+          <div class="risk-row critical-row">
+            <span class="risk-id">#1038</span>
+            <span class="risk-client">Patel Industries</span>
+            <span class="risk-type">Employment Visa</span>
+            <span class="risk-days">3d left</span>
+            <span class="risk-badge" style="background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #EF4444;">AT RISK</span>
+          </div>
+          <div class="risk-row">
+            <span class="risk-id">#1041</span>
+            <span class="risk-client">Chen Family</span>
+            <span class="risk-type">Adjustment of Status</span>
+            <span class="risk-days">12d left</span>
+            <span class="risk-badge" style="background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); color: #F59E0B;">WATCH</span>
+          </div>
+          <div class="risk-row">
+            <span class="risk-id">#1044</span>
+            <span class="risk-client">Nakamura Corp</span>
+            <span class="risk-type">Intra-Co. Transfer</span>
+            <span class="risk-days">28d left</span>
+            <span class="risk-badge" style="background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2); color: #10B981;">ON TRACK</span>
+          </div>
+          <div class="risk-row">
+            <span class="risk-id">#1047</span>
+            <span class="risk-client">Rivera-Gomez</span>
+            <span class="risk-type">Family Petition</span>
+            <span class="risk-days">45d left</span>
+            <span class="risk-badge" style="background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2); color: #10B981;">ON TRACK</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SECTION 05: Tenant Isolation ═══ -->
+<section class="hiw-section">
+  <div class="hiw-section-inner">
+    <div class="hiw-section-meta">
+      <span class="hiw-section-num">05</span>
+      <span class="hiw-section-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </span>
+    </div>
+    <h2>Your data, your firm, isolated by design</h2>
+    <p class="hiw-section-sub">Structural separation — not just permissions, but architecture.</p>
+    <div class="hiw-section-body no-visual">
+      <div class="hiw-section-text">
+        <p>Every firm on MatterOS operates within its own <strong>organization scope</strong>. Data isolation isn't a feature toggle — it's built into how every query, every API call, and every dashboard view is constructed.</p>
+        <p>Role-based membership and invite-based onboarding mean you control exactly who has access and at what level. New team members are provisioned through secure, token-based invitations with expiry controls. No shared passwords. No ambiguous access.</p>
+        <div class="hiw-feature-grid">
+          <div class="hiw-feature-item">
+            <div class="hiw-feature-item-label">Organization-scoped queries</div>
+            <div class="hiw-feature-item-desc">Every data request is filtered to your firm</div>
+          </div>
+          <div class="hiw-feature-item">
+            <div class="hiw-feature-item-label">Role-based access</div>
+            <div class="hiw-feature-item-desc">Partner, associate, paralegal — each sees what they need</div>
+          </div>
+          <div class="hiw-feature-item">
+            <div class="hiw-feature-item-label">Token-based invitations</div>
+            <div class="hiw-feature-item-desc">Secure onboarding with expiry and usage limits</div>
+          </div>
+          <div class="hiw-feature-item">
+            <div class="hiw-feature-item-label">Cross-org access blocked</div>
+            <div class="hiw-feature-item-desc">Verified through end-to-end security testing</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SECTION 06: Explainability ═══ -->
+<section class="hiw-section">
+  <div class="hiw-section-inner">
+    <div class="hiw-section-meta">
+      <span class="hiw-section-num">06</span>
+      <span class="hiw-section-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+      </span>
+    </div>
+    <h2>Explainable, not black-box</h2>
+    <p class="hiw-section-sub">You can always answer "why did the system do that?" — because the system shows its work.</p>
+    <div class="hiw-section-body no-visual">
+      <div class="hiw-section-text">
+        <p>MatterOS does not use opaque AI to make or recommend legal decisions. Every output — every risk flag, every stage validation, every policy attachment — is <strong>traceable to a specific rule, event, and context</strong>.</p>
+        <p>This is a deliberate architectural choice. In a practice area where attorneys must understand and justify every action taken on a client's behalf, a system that can't explain itself is a liability — not a tool.</p>
+        <p>When your client asks why a particular course of action was recommended, when opposing counsel challenges your filing rationale, or when a regulator audits your compliance — the answer isn't "the AI suggested it." The answer is documented, deterministic, and defensible.</p>
+        <div class="hiw-principle">
+          <strong>Our principle:</strong> Legal explainability over black-box AI. Deterministic audit trails over probabilistic suggestions. Compliance you can prove, not compliance you hope for.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER CTA ═══ -->
+<footer class="hiw-footer">
+  <h2>Built for firms that take<br>compliance seriously.</h2>
+  <p>MatterOS is the operational backbone for immigration law firms that need to prove — not just promise — that their processes work.</p>
+  <div class="hiw-cta-buttons">
+    <a href="https://automationlegal.com/matteros" class="hiw-btn-primary" target="_blank" rel="noopener">Request Early Access</a>
+    <a href="https://calendly.com/automationlegal/30min" class="hiw-btn-ghost" target="_blank" rel="noopener">Talk to Our Team</a>
+  </div>
+  <p class="hiw-copyright">MATTEROS © 2026</p>
+</footer>
+
+<script>
+// ─── Animated Ledger ──────────────────────────────────
+(function() {
+  var rows = document.querySelectorAll('#ledger-container .ledger-row');
+  var started = false;
+  var count = 0;
+
+  function revealNext() {
+    if (count < rows.length) {
+      rows[count].classList.add('visible');
+      count++;
+      setTimeout(revealNext, 600);
+    }
+  }
+
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting && !started) {
+        started = true;
+        setTimeout(revealNext, 300);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  observer.observe(document.getElementById('ledger-container'));
+})();
+
+// ─── Stage Pipeline ───────────────────────────────────
+(function() {
+  var stages = [
+    { name: 'Intake',       color: '#3B82F6' },
+    { name: 'Review',       color: '#8B5CF6' },
+    { name: 'Preparation',  color: '#F59E0B' },
+    { name: 'Filing',       color: '#10B981' },
+    { name: 'Pending',      color: '#EC4899' },
+    { name: 'Resolved',     color: '#6366F1' },
+  ];
+
+  var pipeline = document.getElementById('stage-pipeline');
+  var activeStage = 0;
+  var started = false;
+
+  // Build HTML
+  stages.forEach(function(stage, i) {
+    var item = document.createElement('div');
+    item.className = 'stage-item';
+
+    var nodeWrap = document.createElement('div');
+    nodeWrap.className = 'stage-node-wrap';
+    nodeWrap.id = 'stage-node-' + i;
+
+    var circle = document.createElement('div');
+    circle.className = 'stage-circle';
+    circle.id = 'stage-circle-' + i;
+    circle.style.border = '2px solid ' + stage.color;
+    circle.style.background = 'transparent';
+
+    var numSpan = document.createElement('span');
+    numSpan.style.color = stage.color;
+    numSpan.style.fontSize = '12px';
+    numSpan.style.fontWeight = '600';
+    numSpan.textContent = i + 1;
+    circle.appendChild(numSpan);
+
+    var label = document.createElement('span');
+    label.className = 'stage-label';
+    label.id = 'stage-label-' + i;
+    label.textContent = stage.name;
+
+    nodeWrap.appendChild(circle);
+    nodeWrap.appendChild(label);
+    item.appendChild(nodeWrap);
+
+    if (i < stages.length - 1) {
+      var conn = document.createElement('div');
+      conn.className = 'stage-connector';
+      conn.id = 'stage-conn-' + i;
+      item.appendChild(conn);
+    }
+
+    pipeline.appendChild(item);
+  });
+
+  function updateStages(active) {
+    stages.forEach(function(stage, i) {
+      var nodeWrap = document.getElementById('stage-node-' + i);
+      var circle = document.getElementById('stage-circle-' + i);
+      var label = document.getElementById('stage-label-' + i);
+      var conn = document.getElementById('stage-conn-' + i);
+
+      if (i <= active) {
+        nodeWrap.classList.add('active-or-past');
+      } else {
+        nodeWrap.classList.remove('active-or-past');
+      }
+
+      // Circle content
+      circle.innerHTML = '';
+      circle.style.border = '2px solid ' + stage.color;
+
+      if (i < active) {
+        // Completed: filled + checkmark
+        circle.style.background = stage.color;
+        var check = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        check.setAttribute('width', '16');
+        check.setAttribute('height', '16');
+        check.setAttribute('viewBox', '0 0 20 20');
+        check.setAttribute('fill', 'none');
+        var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', 'M4 10.5L8 14.5L16 6.5');
+        path.setAttribute('stroke', '#fff');
+        path.setAttribute('stroke-width', '2');
+        path.setAttribute('stroke-linecap', 'round');
+        path.setAttribute('stroke-linejoin', 'round');
+        check.appendChild(path);
+        circle.appendChild(check);
+      } else if (i === active) {
+        // Active: filled + pulse dot + glow
+        circle.style.background = stage.color;
+        circle.style.boxShadow = '0 0 20px ' + stage.color + '40';
+        var dot = document.createElement('div');
+        dot.className = 'stage-pulse-dot';
+        circle.appendChild(dot);
+      } else {
+        // Future: empty with number
+        circle.style.background = 'transparent';
+        circle.style.boxShadow = 'none';
+        var num = document.createElement('span');
+        num.style.color = stage.color;
+        num.style.fontSize = '12px';
+        num.style.fontWeight = '600';
+        num.textContent = i + 1;
+        circle.appendChild(num);
+      }
+
+      // Label brightness
+      if (i <= active) {
+        label.classList.add('lit');
+      } else {
+        label.classList.remove('lit');
+      }
+
+      // Connector
+      if (conn) {
+        if (i < active) {
+          conn.style.background = stages[i + 1].color;
+        } else {
+          conn.style.background = 'rgba(255,255,255,0.08)';
+        }
+      }
+    });
+  }
+
+  updateStages(0);
+
+  function advance() {
+    if (activeStage < stages.length - 1) {
+      activeStage++;
+      updateStages(activeStage);
+      setTimeout(advance, 900);
+    }
+  }
+
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting && !started) {
+        started = true;
+        setTimeout(advance, 500);
+      }
+    });
+  }, { threshold: 0.3 });
+
+  observer.observe(document.getElementById('stage-container'));
+})();
+</script>
+
+</body>
+</html>

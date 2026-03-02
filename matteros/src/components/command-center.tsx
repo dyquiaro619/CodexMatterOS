@@ -243,13 +243,18 @@ export function CommandCenter({ data }: { data: CommandCenterData }) {
     <main className="shell">
       <header className="hero-head">
         <div>
-          <p className="eyebrow">MatterOS / Partner Command Bridge</p>
+          <p className="eyebrow">MatterOS / Command Bridge</p>
           <h1>Command Bridge</h1>
           <p className="bridge-note">Layer 1 · Firm Pulse: {formatLastEvaluated(data.dashboard.lastEvaluatedAt)}</p>
         </div>
-        <div className={`posture-chip posture-${postureTone(posture)}`}>
-          <span className="status-dot" />
-          {postureText(posture)}
+        <div className="hero-actions">
+          <Link className="hero-link" href="/value-to-firm">
+            Value to Firm
+          </Link>
+          <div className={`posture-chip posture-${postureTone(posture)}`}>
+            <span className="status-dot" />
+            {postureText(posture)}
+          </div>
         </div>
       </header>
 

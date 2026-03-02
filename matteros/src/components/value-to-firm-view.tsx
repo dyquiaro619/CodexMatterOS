@@ -90,6 +90,8 @@ export function ValueToFirmView() {
   const model = useMemo(() => {
     const atRiskMatters = matters * (policySensitiveShare / 100);
     const incidentsPerYear = (matters / 100) * incidentRate;
+    const reviewRate = Math.max(0.45, Math.min(0.92, 1 - incidentRate * 0.03));
+    const reviewedBeforeRisk = atRiskMatters * reviewRate;
 
     const incidentLoss = incidentsPerYear * incidentCost;
     const reworkLoss = atRiskMatters * avgFee * 0.08;
@@ -103,6 +105,7 @@ export function ValueToFirmView() {
     return {
       atRiskMatters,
       incidentsPerYear,
+      reviewedBeforeRisk,
       incidentLoss,
       reworkLoss,
       partnerHours,
@@ -119,6 +122,21 @@ export function ValueToFirmView() {
       <section className="value-hero">
         <p className="value-eyebrow">Value To Firm</p>
         <h1>Operational Risk Control For Immigration Firms</h1>
+      </section>
+
+      <section className="value-trust">
+        <article className="value-trust-item">
+          <h3>Built For Immigration Policy Volatility</h3>
+          <p>Your team gets operational clarity even as guidance changes.</p>
+        </article>
+        <article className="value-trust-item">
+          <h3>Immutable Decision Records</h3>
+          <p>Every matter action stays traceable to its decision context.</p>
+        </article>
+        <article className="value-trust-item">
+          <h3>Audit-Ready Lineage</h3>
+          <p>Past clearances remain explainable when policy shifts later.</p>
+        </article>
       </section>
 
       <section className="value-section">
@@ -207,8 +225,8 @@ export function ValueToFirmView() {
               <strong>{formatNumber(model.atRiskMatters)}</strong>
             </div>
             <div className="value-metric-card">
-              <span>Expected incidents</span>
-              <strong>{formatNumber(model.incidentsPerYear)} / year</strong>
+              <span>Matters Reviewed Before Deadline Risk</span>
+              <strong>{formatNumber(model.reviewedBeforeRisk)}</strong>
             </div>
             <div className="value-metric-card">
               <span>Partner escalation time</span>
@@ -273,6 +291,24 @@ export function ValueToFirmView() {
           This estimate focuses on risk-value protected for your firm. Commercial terms are scoped
           separately after workflow and risk-baseline review.
         </p>
+
+        <div className="value-roadmap">
+          <article className="value-roadmap-step">
+            <span>Week 1-2</span>
+            <h3>Baseline Risk Map</h3>
+            <p>Identify matter segments where policy change creates the highest exposure.</p>
+          </article>
+          <article className="value-roadmap-step">
+            <span>Week 3-6</span>
+            <h3>Escalation Workflow Live</h3>
+            <p>Enable command signals so high-risk matters surface earlier for partner action.</p>
+          </article>
+          <article className="value-roadmap-step">
+            <span>Week 7-12</span>
+            <h3>Snapshot Audit Readiness</h3>
+            <p>Operationalize decision lineage for fast internal review and client explanation.</p>
+          </article>
+        </div>
 
         <div className="value-grid value-grid-main">
           <article className="value-panel">
@@ -342,6 +378,21 @@ export function ValueToFirmView() {
             </p>
           </article>
         </div>
+
+        <details className="value-methodology">
+          <summary>See Methodology</summary>
+          <div>
+            <p>
+              This model estimates preventable exposure using your matter volume, policy sensitivity,
+              incident pattern, and escalation time load.
+            </p>
+            <ul>
+              <li>Incident Loss = expected incidents x average incident cost</li>
+              <li>Rework Leakage = policy-sensitive matters x average fee x 8%</li>
+              <li>Partner Time Drain = escalation hours x blended partner-hour cost</li>
+            </ul>
+          </div>
+        </details>
       </section>
 
       <section className="value-section">
@@ -369,6 +420,28 @@ export function ValueToFirmView() {
           <h3>{activeTrack.title}</h3>
           <p>{activeTrack.text}</p>
         </article>
+      </section>
+
+      <section className="value-section">
+        <h2>Next Steps</h2>
+        <p>Choose the next action that matches where your team is today.</p>
+
+        <div className="value-cta-grid">
+          <a
+            className="value-cta value-cta-primary"
+            href="https://calendly.com/automationlegal/30min"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Book Risk Baseline Session
+          </a>
+          <a className="value-cta value-cta-secondary" href="/command-center">
+            See 12-Minute Product Walkthrough
+          </a>
+          <a className="value-cta value-cta-tertiary" href="/overview">
+            Download Partner Brief (PDF)
+          </a>
+        </div>
       </section>
     </main>
   );
